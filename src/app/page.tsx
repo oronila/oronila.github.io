@@ -30,10 +30,10 @@ export default function Home() {
         {/* Bio / Lines */}
         <section className="mt-8 space-y-4 leading-relaxed">
           <p>
-            building simple, fast web things. interested in ai, product, and good ux.
+            building because I am chronically bored.
           </p>
           <p>
-            open-source and projects on{' '}
+            projects and commits on{' '}
             <a href="https://github.com/oronila" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">github</a>.
           </p>
           <p>
