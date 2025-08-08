@@ -6,12 +6,6 @@ export default function Home() {
         <header className="flex items-start justify-between">
           <h1 className="text-2xl font-semibold tracking-tight">Noor Ali</h1>
           <nav className="flex items-center gap-5 text-sm text-neutral-400">
-            <a href="mailto:oronila@users.noreply.github.com" className="hover:text-neutral-200 transition" aria-label="Email">
-              {/* Mail icon */}
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                <path d="M1.5 6A2.25 2.25 0 0 1 3.75 3.75h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6Zm2.25-.75a.75.75 0 0 0-.75.75v.334l9 5.4 9-5.4V6a.75.75 0 0 0-.75-.75H3.75Zm17.25 4.108-8.55 5.13a.75.75 0 0 1-.8 0L3.1 9.358V18c0 .414.336.75.75.75h16.5a.75.75 0 0 0 .75-.75V9.358Z" />
-              </svg>
-            </a>
             <a href="https://github.com/oronila" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-200 transition" aria-label="GitHub">
               {/* GitHub icon */}
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
@@ -44,16 +38,8 @@ export default function Home() {
           </p>
           <p>
             always happy to chat — reach me by{' '}
-            <a href="mailto:oronila@users.noreply.github.com" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">email</a>.
+            <a href="mailto:noorali05@utexas.edu" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">email</a>.
           </p>
-        </section>
-
-        {/* Essays */}
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold mb-3">Essays</h2>
-          <ul className="space-y-2 text-neutral-300">
-            {/* empty for now */}
-          </ul>
         </section>
 
         {/* Footer */}
