@@ -17,10 +17,6 @@ export default function Home() {
     return () => window.removeEventListener('terminal-exit', handleTerminalExit);
   }, []);
 
-  if (isTerminalMode) {
-    return <Terminal />;
-  }
-
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-200">
       <div className="mx-auto max-w-3xl px-6 py-14">
@@ -81,6 +77,11 @@ export default function Home() {
           © {new Date().getFullYear()} Noor Ali
         </footer>
       </div>
+      {isTerminalMode && (
+        <div className="fixed inset-0 z-50">
+          <Terminal />
+        </div>
+      )}
     </main>
   );
 }

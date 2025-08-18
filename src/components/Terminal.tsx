@@ -23,8 +23,13 @@ export default function Terminal() {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isClosing, setIsClosing] = useState(false);
+  const [isDonutActive, setIsDonutActive] = useState(false);
+  const [donutFrame, setDonutFrame] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const donutTimerRef = useRef<number | null>(null);
+  const donutARef = useRef(0);
+  const donutBRef = useRef(0);
 
   // Focus input on mount
   useEffect(() => {
@@ -37,6 +42,83 @@ export default function Terminal() {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [lines]);
+
+  // Cleanup any running animations on unmount
+  useEffect(() => {
+    return () => {
+      if (donutTimerRef.current) window.clearInterval(donutTimerRef.current);
+    };
+  }, []);
+
+  const computeDonutFrame = (A: number, B: number) => {
+    const width = 100; // columns
+    const height = 40; // rows
+    const output: string[] = new Array(width * height).fill(' ');
+    const zBuffer: number[] = new Array(width * height).fill(0);
+    const R1 = 1;
+    const R2 = 2;
+    const K2 = 5;
+    const K1 = width * K2 * 3 / (8 * (R1 + R2));
+    const cosA = Math.cos(A), sinA = Math.sin(A);
+    const cosB = Math.cos(B), sinB = Math.sin(B);
+    const luminanceChars = '.,-~:;=!*#$@';
+
+    for (let theta = 0; theta < 6.28; theta += 0.07) {
+      const costheta = Math.cos(theta), sintheta = Math.sin(theta);
+      for (let phi = 0; phi < 6.28; phi += 0.02) {
+        const cosphi = Math.cos(phi), sinphi = Math.sin(phi);
+        const circleX = R2 + R1 * costheta;
+        const circleY = R1 * sintheta;
+
+        // 3D coordinate after rotation
+        const x = circleX * (cosB * cosphi + sinA * sinB * sinphi) - circleY * cosA * sinB;
+        const y = circleX * (sinB * cosphi - sinA * cosB * sinphi) + circleY * cosA * cosB;
+        const z = K2 + cosA * circleX * sinphi + circleY * sinA;
+        const ooz = 1 / z; // "one over z"
+
+        const xp = Math.floor(width / 2 + K1 * ooz * x);
+        const yp = Math.floor(height / 2 - K1 * ooz * y);
+
+        const L = cosphi * costheta * sinB - cosA * costheta * sinphi - sinA * sintheta + cosB * (cosA * sintheta - costheta * sinA * sinphi);
+        const luminanceIndex = Math.floor((L + 1) * 5.5);
+
+        const idx = xp + yp * width;
+        if (idx >= 0 && idx < width * height && ooz > zBuffer[idx]) {
+          zBuffer[idx] = ooz;
+          output[idx] = luminanceChars[Math.max(0, Math.min(luminanceChars.length - 1, luminanceIndex))];
+        }
+      }
+    }
+
+    // Convert to string with line breaks
+    const rows: string[] = [];
+    for (let r = 0; r < height; r++) {
+      rows.push(output.slice(r * width, (r + 1) * width).join(''));
+    }
+    return rows.join('\n');
+  };
+
+  const startDonut = () => {
+    if (isDonutActive) return;
+    setIsDonutActive(true);
+    donutARef.current = 0;
+    donutBRef.current = 0;
+    // warm first frame
+    setDonutFrame(computeDonutFrame(donutARef.current, donutBRef.current));
+    donutTimerRef.current = window.setInterval(() => {
+      donutARef.current += 0.07;
+      donutBRef.current += 0.03;
+      setDonutFrame(computeDonutFrame(donutARef.current, donutBRef.current));
+    }, 50);
+  };
+
+  const stopDonut = () => {
+    if (donutTimerRef.current) {
+      window.clearInterval(donutTimerRef.current);
+      donutTimerRef.current = null;
+    }
+    setIsDonutActive(false);
+  };
 
   const executeCommand = (command: string) => {
     const cmd = command.trim().toLowerCase();
@@ -59,6 +141,8 @@ export default function Terminal() {
           '  about         - Learn about me',
           '  projects      - View my projects',
           '  contact       - Get my contact information',
+          '  donut         - Spin an ASCII donut',
+          '  stop          - Stop current animation',
           '  education     - My educational background',
           '  clear         - Clear the terminal',
           '  exit          - Return to normal view',
@@ -129,14 +213,34 @@ export default function Terminal() {
         break;
         
       case 'clear':
+        stopDonut();
         setLines(INITIAL_LINES);
         setCurrentInput('');
         return;
         
       case 'exit':
         // This will be handled by parent component
+        stopDonut();
         window.dispatchEvent(new CustomEvent('terminal-exit'));
         return;
+
+      case 'donut':
+        output = [
+          'Starting ASCII donut... Type "stop" to end.',
+          ''
+        ];
+        // Start without waiting for next tick so the user sees it immediately
+        startDonut();
+        break;
+
+      case 'stop':
+        if (isDonutActive) {
+          stopDonut();
+          output = ['Stopped animation.'];
+        } else {
+          output = ['No animation to stop.'];
+        }
+        break;
         
       case '':
         // Empty command, just show prompt
@@ -253,6 +357,14 @@ export default function Terminal() {
               {line.content}
             </div>
           ))}
+
+          {isDonutActive && (
+            <div className="mt-2">
+              <pre className="text-green-300 leading-4 whitespace-pre font-mono text-[10px] sm:text-[11px] md:text-[12px]">
+{donutFrame}
+              </pre>
+            </div>
+          )}
           
           {/* Current input line */}
           <div className="flex items-center text-green-300">
