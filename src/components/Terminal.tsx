@@ -140,9 +140,11 @@ export default function Terminal() {
           '  help          - Show this help message',
           '  about         - Learn about me',
           '  projects      - View my projects',
+          '  experiences  - View my work experience',
           '  contact       - Get my contact information',
           '  donut         - Spin an ASCII donut',
           '  stop          - Stop current animation',
+          '  skills        - View my technical skills',
           '  education     - My educational background',
           '  clear         - Clear the terminal',
           '  exit          - Return to normal view',
@@ -153,33 +155,12 @@ export default function Terminal() {
         
       case 'about':
         output = [
-          'Hi! I\'m Noor Ali',
-          '',
-          'I\'m a Computer Science student at UT Austin.',
-          'I love building things because I am chronically bored.',
-          '',
-          'Currently exploring full-stack development, AI/ML,',
-          'and always looking for interesting problems to solve.',
-          '',
-          'When I\'m not coding, you can find me contributing to',
-          'open source projects or learning new technologies.'
+          'hi! i\'m Noor Ali',
         ];
         break;
         
       case 'projects':
-        output = [
-          'Recent Projects:',
-          '',
-          '1. Personal Website Terminal - This interactive terminal!',
-          '   Tech: Next.js, TypeScript, Tailwind CSS',
-          '',
-          '2. Chat with Noor - AI-powered chat interface',
-          '   Tech: Next.js, API Routes, AI integration',
-          '',
-          'View more projects at: github.com/oronila',
-          '',
-          'Type "resume" to see my full project portfolio'
-        ];
+        output = ['WIP'];
         break;
         
       case 'contact':
@@ -191,7 +172,7 @@ export default function Terminal() {
           'LinkedIn: linkedin.com/in/noor-ali05',
           'Twitter/X: x.com/oronila_',
           '',
-          'Always happy to chat about tech, projects, or opportunities!'
+          'Always happy to chat!'
         ];
         break;
 
@@ -201,14 +182,49 @@ export default function Terminal() {
           '',
           'University of Texas at Austin',
           'Bachelor of Science in Computer Science',
-          'Expected Graduation: 2026',
+          'Expected Graduation: May 2027',
+          'GPA: 3.85',
           '',
           'Relevant Coursework:',
-          '- Data Structures and Algorithms',
-          '- Software Engineering',
-          '- Database Systems',
-          '- Computer Networks',
-          '- Machine Learning'
+          '- Data Structures',
+          '- Computer Architecture',
+          '- Operating Systems',
+          '- Virtualization',
+          '- Network Security',
+          '- Energy Efficient Computing'
+        ];
+        break;
+
+      case 'skills':
+        output = [
+          'Technical Skills:',
+          '',
+          'Languages: Python, Java, C, C++, JavaScript, TypeScript',
+          'Web: HTML, CSS, React, Node.js, Next.js',
+          'Cloud: AWS, Azure, GCP',
+          'DevOps: Docker',
+          'AI/Agents: LangGraph, OpenAI Agents SDK',
+          'Tools: Cursor, Git'
+        ];
+        break;
+
+      case 'experiences':
+      case 'experience':
+      case 'exp':
+        output = [
+          'Experience:',
+          '',
+          'Coalition Inc. - Backend Engineer Intern (Remote) | May 2025 - Aug 2025',
+          '- 5m -> 2.5m response time; 5k+ req/mo; +32% accuracy; Zendesk, Python, Docker, Sentry, Datadog',
+          '',
+          'Fynopsis - Co-Founder, CTO | Aug 2024 - May 2025',
+          '- Saved 20+ hrs/deal; accelerators; AWS full-stack + AI (Graph-RAG, Next.js, LangGraph)',
+          '',
+          'UT Austin - Undergraduate Researcher | Mar 2024 - Mar 2025',
+          '- ROS multi-agent LLMs (+23% engagement); 3D mapping (82% acc, 229 ms); CUDA, C++',
+          '',
+          'Trend Micro - Software R&D Intern | Jun 2024 - Aug 2024',
+          '- AWS CDK resource tracker; automated cleanup; up to $300k/mo savings; +280% efficiency'
         ];
         break;
         
@@ -342,7 +358,7 @@ export default function Terminal() {
                 </svg>
               </button>
             </div>
-            <span className="text-green-300">noor@utexas:~$</span>
+            <span className="text-green-300">noorali05@utexas.edu:~$</span>
           </div>
         </div>
 

@@ -9,7 +9,7 @@ export default function ToggleSwitch({ isOn, onToggle, onLabel, offLabel }: Togg
   return (
     <button
       onClick={onToggle}
-      className="relative inline-flex h-9 w-48 items-center rounded-full border border-neutral-800 bg-neutral-900/40 p-1 transition-colors hover:border-neutral-700"
+      className="relative inline-flex h-9 w-55 items-center rounded-full border border-neutral-800 bg-neutral-900/40 p-1 transition-colors hover:border-neutral-700"
       aria-label={`Switch to ${isOn ? offLabel : onLabel} mode`}
     >
       {/* Sliding indicator */}
