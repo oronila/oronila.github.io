@@ -60,7 +60,7 @@ export default function Home() {
         {/* Bio / Lines */}
         <section className="mt-8 space-y-4 leading-relaxed">
           <p>
-            building because I am chronically bored.
+            probably building something new.
           </p>
           <p>
             projects and commits on{' '}
