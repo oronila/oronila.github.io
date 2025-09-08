@@ -139,7 +139,7 @@ export default function Terminal() {
           'Available commands:',
           '  help          - Show this help message',
           '  about         - Learn about me',
-          '  projects      - View my projects',
+          // '  projects      - View my projects',
           '  experiences  - View my work experience',
           '  contact       - Get my contact information',
           '  donut         - Spin an ASCII donut',
@@ -159,9 +159,9 @@ export default function Terminal() {
         ];
         break;
         
-      case 'projects':
-        output = ['WIP'];
-        break;
+      // case 'projects':
+      //   output = ['WIP'];
+      //   break;
         
       case 'contact':
         output = [
