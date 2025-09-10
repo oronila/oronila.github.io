@@ -183,15 +183,7 @@ export default function Terminal() {
           'University of Texas at Austin',
           'Bachelor of Science in Computer Science',
           'Expected Graduation: May 2027',
-          'GPA: 3.85',
           '',
-          'Relevant Coursework:',
-          '- Data Structures',
-          '- Computer Architecture',
-          '- Operating Systems',
-          '- Virtualization',
-          '- Network Security',
-          '- Energy Efficient Computing'
         ];
         break;
 
