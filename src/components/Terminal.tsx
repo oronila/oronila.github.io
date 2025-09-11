@@ -192,7 +192,7 @@ export default function Terminal() {
           'Technical Skills:',
           '',
           'Languages: Python, Java, C, C++, JavaScript, TypeScript',
-          'Web: HTML, CSS, React, Node.js, Next.js',
+          'Web: HTML, CSS, React, Node.js',
           'Cloud: AWS, Azure, GCP',
           'DevOps: Docker',
           'AI/Agents: LangGraph, OpenAI Agents SDK',
