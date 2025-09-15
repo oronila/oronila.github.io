@@ -142,6 +142,7 @@ export default function Terminal() {
           // '  projects      - View my projects',
           '  experiences  - View my work experience',
           '  contact       - Get my contact information',
+          '  startups      - Links to fynopsis.ai and trynebula.ai',
           '  donut         - Spin an ASCII donut',
           '  stop          - Stop current animation',
           '  skills        - View my technical skills',
@@ -173,6 +174,17 @@ export default function Terminal() {
           'Twitter/X: x.com/oronila_',
           '',
           'Always happy to chat!'
+        ];
+        break;
+
+      case 'startups':
+      case 'companies':
+      case 'links':
+        output = [
+          'Previous startups:',
+          '',
+          'fynopsis.ai  - https://fynopsis.ai',
+          'trynebula.ai - https://trynebula.ai',
         ];
         break;
 
