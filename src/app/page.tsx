@@ -67,6 +67,11 @@ export default function Home() {
             <a href="https://github.com/oronila" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">github</a>.
           </p>
           <p>
+            i used to work on{' '}
+            <a href="https://fynopsis.ai" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">fynopsis.ai</a>{' '}and{' '}
+            <a href="https://trynebula.ai" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">trynebula.ai</a>.
+          </p>
+          <p>
             always happy to chat — reach me by{' '}
             <a href="mailto:noorali05@utexas.edu" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">email</a>.
           </p>
