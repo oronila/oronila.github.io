@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import SlopeGame from './SlopeGame';
 
 interface TerminalLine {
   type: 'input' | 'output' | 'error';
@@ -25,6 +26,7 @@ export default function Terminal() {
   const [isClosing, setIsClosing] = useState(false);
   const [isDonutActive, setIsDonutActive] = useState(false);
   const [donutFrame, setDonutFrame] = useState('');
+  const [miniApp, setMiniApp] = useState<null | 'slope'>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const donutTimerRef = useRef<number | null>(null);
@@ -120,6 +122,13 @@ export default function Terminal() {
     setIsDonutActive(false);
   };
 
+  const closeMiniApp = () => {
+    if (miniApp) {
+      setMiniApp(null);
+      setLines(prev => [...prev, { type: 'output', content: 'Closed app.' }]);
+    }
+  };
+
   const executeCommand = (command: string) => {
     const cmd = command.trim().toLowerCase();
     
@@ -143,6 +152,7 @@ export default function Terminal() {
           '  experiences  - View my work experience',
           '  contact       - Get my contact information',
           '  startups      - Links to fynopsis.ai and trynebula.ai',
+          '  slope         - Play a Slope mini-game',
           '  donut         - Spin an ASCII donut',
           '  stop          - Stop current animation',
           '  skills        - View my technical skills',
@@ -234,6 +244,7 @@ export default function Terminal() {
         
       case 'clear':
         stopDonut();
+        if (miniApp) setMiniApp(null);
         setLines(INITIAL_LINES);
         setCurrentInput('');
         return;
@@ -241,6 +252,7 @@ export default function Terminal() {
       case 'exit':
         // This will be handled by parent component
         stopDonut();
+        if (miniApp) setMiniApp(null);
         window.dispatchEvent(new CustomEvent('terminal-exit'));
         return;
 
@@ -253,12 +265,22 @@ export default function Terminal() {
         startDonut();
         break;
 
+      case 'slope':
+        output = [
+          'Opening Slope mini app... (Esc or close button to exit)'
+        ];
+        setMiniApp('slope');
+        break;
+
       case 'stop':
         if (isDonutActive) {
           stopDonut();
           output = ['Stopped animation.'];
+        } else if (miniApp) {
+          setMiniApp(null);
+          output = ['Closed app.'];
         } else {
-          output = ['No animation to stop.'];
+          output = ['Nothing to stop.'];
         }
         break;
         
@@ -402,6 +424,44 @@ export default function Terminal() {
             <span className="animate-pulse">_</span>
           </div>
         </div>
+
+        {/* Mini-app overlay (centered window) */}
+        {miniApp && (
+          <div className="fixed inset-0 z-50 grid place-items-center">
+            <div className="bg-black/95 border border-green-800/60 rounded-md shadow-2xl w-[760px] max-w-[92vw]">
+              {/* Mini window header */}
+              <div className="flex items-center justify-between px-3 py-2 border-b border-green-800/60">
+                <div className="group flex items-center gap-2">
+                  <button
+                    onClick={() => setMiniApp(null)}
+                    aria-label="Close"
+                    className="h-3 w-3 rounded-full bg-red-500 hover:brightness-110"
+                  />
+                  <button
+                    onClick={() => setMiniApp(null)}
+                    aria-label="Minimize"
+                    className="h-3 w-3 rounded-full bg-yellow-500 hover:brightness-110"
+                  />
+                  <button
+                    onClick={() => setMiniApp(null)}
+                    aria-label="Maximize"
+                    className="h-3 w-3 rounded-full bg-green-500 hover:brightness-110"
+                  />
+                </div>
+                <div className="text-green-300 text-sm font-medium">
+                  {miniApp === 'slope' ? 'Slope' : 'App'}
+                </div>
+                <div className="w-12" />
+              </div>
+
+              <div className="p-3 flex items-center justify-center">
+                {miniApp === 'slope' && (
+                  <SlopeGame width={700} height={430} onClose={closeMiniApp} />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
