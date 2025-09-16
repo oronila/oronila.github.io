@@ -18,6 +18,19 @@ const INITIAL_LINES: TerminalLine[] = [
   { type: 'output', content: '' },
 ];
 
+// Boot animation spacing controls:
+// Each entry adjusts the gap before that line index (0-based).
+// Positive = more space before this line; Negative = less.
+// Update these values to tune spacing from the top down to the desired line.
+const BOOT_GAP_OFFSETS_PX: number[] = [
+  3,  // before line 0 (Welcome ...)
+  0,  // before line 1
+  0,  // before line 2
+  0,  // before line 3 (empty)
+  0, // before line 4 (Type "help" ...)
+  0, // before line 5 (empty after Type "help")
+];
+
 export default function Terminal() {
   const [lines, setLines] = useState<TerminalLine[]>(INITIAL_LINES);
   const [currentInput, setCurrentInput] = useState('');
@@ -32,11 +45,190 @@ export default function Terminal() {
   const donutTimerRef = useRef<number | null>(null);
   const donutARef = useRef(0);
   const donutBRef = useRef(0);
+  const [isBooting, setIsBooting] = useState(true);
+  const matrixCanvasRef = useRef<HTMLCanvasElement>(null);
+  const matrixAnimRef = useRef<number | null>(null);
+  const [showBootOverlay, setShowBootOverlay] = useState(true);
+  const [isBootFading, setIsBootFading] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const linesRef = useRef<HTMLDivElement>(null);
 
   // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Startup "matrix rain" overlay with reveal
+  useEffect(() => {
+    const canvas = matrixCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Match terminal's font size and family
+    const getComputed = () => {
+      const el = (terminalRef.current as Element) ?? document.documentElement;
+      const styles = window.getComputedStyle(el);
+      const sizeNum = parseFloat(styles.fontSize);
+      const fam = styles.fontFamily || 'monospace';
+      return { size: Number.isFinite(sizeNum) ? Math.round(sizeNum) : 14, fam };
+    };
+    const { size: initialFontSize, fam: initialFontFamily } = getComputed();
+    let fontSize = initialFontSize;
+    let fontFamily = initialFontFamily;
+    const getLineMetrics = () => {
+      let lineHeightPx = fontSize * 1.5;
+      try {
+        const el = (linesRef.current as Element) ?? (terminalRef.current as Element) ?? document.documentElement;
+        const styles = window.getComputedStyle(el);
+        const lhStr = styles.lineHeight;
+        const parsed = parseFloat(lhStr);
+        if (Number.isFinite(parsed)) lineHeightPx = parsed;
+      } catch { /* noop */ }
+      const gapPx = 4; // Tailwind space-y-1 gap
+      return { lineHeightPx, gapPx };
+    };
+    let { lineHeightPx, gapPx } = getLineMetrics();
+    const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const charArray = characters.split('');
+
+    let columns = 0;
+    let drops: number[] = [];
+    const startTime = performance.now();
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // Recompute font settings on resize to keep parity with terminal text
+      try {
+        const { size, fam } = getComputed();
+        fontSize = size;
+        fontFamily = fam;
+      } catch { /* noop */ }
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      const charWidth = Math.max(6, ctx.measureText('M').width);
+      ({ lineHeightPx, gapPx } = getLineMetrics());
+      columns = Math.floor(canvas.width / Math.max(6, charWidth));
+      drops = new Array(columns).fill(1);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const draw = () => {
+      const elapsed = performance.now() - startTime;
+      const phase1 = 450; // ms of full rain
+      const phase2 = 700; // ms of dwindling + reveal
+      const total = phase1 + phase2;
+
+      // fade trail faster in phase 2
+      const t = Math.min(Math.max(elapsed - phase1, 0), phase2);
+      const decay = t / phase2; // 0 -> 1
+      const trailAlpha = 0.08 + decay * 0.22; // 0.08 -> 0.30
+      ctx.fillStyle = `rgba(0, 0, 0, ${trailAlpha.toFixed(3)})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#22c55e'; // Tailwind green-500
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      ctx.textBaseline = 'alphabetic';
+      const charWidth = Math.max(6, ctx.measureText('M').width);
+
+      // Determine rain density
+      let drawProbability = 1;
+      if (elapsed > phase1) {
+        const dwindling = 1 - decay; // 1 -> 0
+        drawProbability = Math.max(0, Math.pow(dwindling, 1.8));
+      }
+
+      for (let i = 0; i < drops.length; i++) {
+        if (Math.random() > drawProbability) continue;
+        const text = charArray[Math.floor(Math.random() * charArray.length)];
+        const x = i * charWidth;
+        const y = drops[i] * fontSize;
+        ctx.fillText(text, x, y);
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      // Reveal preloaded lines during phase 2
+      if (elapsed > phase1) {
+        // Measure left padding from actual container for pixel-perfect X
+        const paddingLeft = (() => {
+          try {
+            const styles = window.getComputedStyle(linesRef.current as Element);
+            const n = parseFloat(styles.paddingLeft);
+            return Number.isFinite(n) ? n : 16;
+          } catch { return 16; }
+        })();
+
+        // Compute baseline offset using container line-height and font metrics
+        const innerLeading = Math.max(0, (lineHeightPx - fontSize) / 2);
+        const ascent = (ctx.measureText('Hg').actualBoundingBoxAscent || fontSize * 0.8);
+        const baselineOffset = innerLeading + ascent;
+
+        const revealProgress = Math.min(decay, 1); // 0 -> 1 across phase 2
+        const glitchProb = Math.max(0, 0.6 - revealProgress * 0.6); // 0.6 -> 0
+
+        ctx.fillStyle = '#34d399'; // Tailwind green-400-ish for readability
+
+        const lineEls: HTMLElement[] = Array.from((linesRef.current?.children ?? [])) as HTMLElement[];
+        const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+
+        const firstLineExtraPx = 2; // subtle bump for visual match during reveal
+        const extraGapPx = 2; // base +2px between gaps during reveal
+        for (let i = 0; i < INITIAL_LINES.length; i++) {
+          const text = INITIAL_LINES[i].content;
+          const lineTop = lineEls[i]?.getBoundingClientRect().top ?? (headerBottom + 16 + i * (lineHeightPx + gapPx));
+          // Start with default cumulative +2px gaps
+          let extraOffset = (i === 0 ? firstLineExtraPx : 0) + (i * extraGapPx);
+          // Apply per-line overrides from BOOT_GAP_OFFSETS_PX if provided
+          if (BOOT_GAP_OFFSETS_PX[i] !== undefined) {
+            // Replace the cumulative gap with explicit configured value relative to baseline
+            // i.e., gap before this line is (configured px)
+            extraOffset = (i === 0 ? 0 : 0) + BOOT_GAP_OFFSETS_PX.slice(0, i + 1).reduce((sum, val) => sum + val, 0);
+          }
+          const y = lineTop + baselineOffset + extraOffset;
+          for (let j = 0; j < text.length; j++) {
+            const targetChar = text[j];
+            const x = paddingLeft + j * charWidth;
+            const charToDraw = targetChar === ' ' && Math.random() < 0.2
+              ? ' '
+              : (Math.random() < glitchProb ? charArray[Math.floor(Math.random() * charArray.length)] : targetChar);
+            ctx.fillText(charToDraw, x, y);
+          }
+        }
+      }
+
+      if (elapsed >= total) {
+        // End animation: fade overlay then unmount
+        setIsBootFading(true);
+        matrixAnimRef.current = null;
+        return;
+      }
+
+      matrixAnimRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      if (matrixAnimRef.current) cancelAnimationFrame(matrixAnimRef.current);
+    };
+  }, []);
+
+  // When fade starts, remove overlay after transition
+  useEffect(() => {
+    if (!isBootFading) return;
+    const t = window.setTimeout(() => {
+      setShowBootOverlay(false);
+      setIsBooting(false);
+    }, 220);
+    return () => window.clearTimeout(t);
+  }, [isBootFading]);
 
   // Scroll to bottom when new lines are added
   useEffect(() => {
@@ -342,13 +534,18 @@ export default function Terminal() {
     <div className={`min-h-screen bg-black text-green-400 font-mono ${
       isClosing ? 'minimize-to-dock' : ''
     }`}>
+      {showBootOverlay && (
+        <div className={`fixed inset-0 z-0 bg-black pointer-events-none transition-opacity duration-200 ${isBootFading ? 'opacity-0' : 'opacity-100'}`}>
+          <canvas ref={matrixCanvasRef} className="w-full h-full block" />
+        </div>
+      )}
       <div
         ref={terminalRef}
         className="h-screen overflow-y-auto"
         onClick={() => inputRef.current?.focus()}
       >
         {/* Sticky Terminal header */}
-        <div className="sticky top-0 z-10 border-b border-green-800/60 bg-black/80 backdrop-blur">
+        <div ref={headerRef} className="sticky top-0 z-10 border-b border-green-800/60 bg-black/80 backdrop-blur">
           <div className="flex items-center px-4 py-2 text-sm">
             <div className="group flex items-center gap-2 mr-3 px-1 py-1">
               {/* Close */}
@@ -389,7 +586,7 @@ export default function Terminal() {
         </div>
 
         {/* Terminal lines */}
-        <div className="space-y-1 p-4">
+        <div ref={linesRef} className="space-y-1 p-4">
           {lines.map((line, index) => (
             <div key={index} className={`${
               line.type === 'input' ? 'text-green-300' : 
@@ -418,6 +615,7 @@ export default function Terminal() {
               onChange={(e) => setCurrentInput(e.target.value)}
               onKeyDown={handleKeyDown}
               className="flex-1 bg-transparent outline-none border-none text-green-400"
+              disabled={isBooting}
               spellCheck={false}
               autoComplete="off"
             />
