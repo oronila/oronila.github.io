@@ -63,7 +63,7 @@ export default function Home() {
             probably building something new.
           </p>
           <p>
-            projects and commits on{' '}
+            projects at{' '}
             <a href="https://github.com/oronila" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 decoration-neutral-600 hover:decoration-neutral-300">github</a>.
           </p>
           <p>
