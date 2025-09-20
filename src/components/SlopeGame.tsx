@@ -8,7 +8,7 @@ interface SlopeGameProps {
   onClose?: () => void;
 }
 
-export default function SlopeGame({ width = 640, height = 420, onClose }: SlopeGameProps) {
+export default function SlopeGame({ width = 700, height = 430, onClose }: SlopeGameProps) {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
