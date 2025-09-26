@@ -36,3 +36,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 *   **Framework**: [Next.js](https://nextjs.org/)
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 *   **Language**: [TypeScript](https://www.typescriptlang.org/)
+
