@@ -11,7 +11,7 @@ export default async function JournalIndexPage() {
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-6">Journal</h1>
       {entries.length === 0 && (
-        <p className="text-gray-500">No entries yet. Add markdown files to <code>content/journal</code>.</p>
+        <p className="text-gray-500">No entries yet. Coming soon... Add markdown files to <code>content/journal</code>.</p>
       )}
       <ul className="space-y-4">
         {entries.map((e) => (
