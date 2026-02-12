@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
+import { ContextMenu, MenuItem } from "./ContextMenu";
 import Dock from "./Dock";
 import Window from "./Window";
 import { AppContent, APP_CONFIG, getDefaultTitle } from "./apps";
@@ -70,6 +71,7 @@ export default function Desktop() {
   ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load persistence
@@ -167,10 +169,63 @@ export default function Desktop() {
     updateWindow(instanceId, { isMinimized: false, zIndex: currentTop + 1 });
   }
 
+  function maximize(instanceId: string) {
+    const win = windows.find((w) => w.instanceId === instanceId);
+    if (!win) return;
+
+    if (win.isMaximized) {
+      // Restore
+      updateWindow(instanceId, {
+        isMaximized: false,
+        ...(win.restoreState ? {
+          position: win.restoreState.position,
+          size: win.restoreState.size,
+        } : {}),
+        restoreState: undefined,
+      });
+    } else {
+      // Maximize
+      const dockHeight = 96; // Approximate dock height + margins
+
+      const maxWidth = window.innerWidth;
+      const maxHeight = window.innerHeight - dockHeight;
+
+      updateWindow(instanceId, {
+        isMaximized: true,
+        restoreState: {
+          position: win.position,
+          size: win.size,
+        },
+        position: { x: 0, y: 0 },
+        size: { width: maxWidth, height: maxHeight },
+      });
+    }
+    focus(instanceId);
+  }
+
+  function handleContextMenu(e: React.MouseEvent) {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  }
+
+  const menuItems: MenuItem[] = [
+    { label: "New Folder", action: () => console.log("New Folder") },
+    { label: "Get Info", action: () => console.log("Get Info") },
+    { separator: true },
+    { label: "Change Wallpaper", action: () => console.log("Change Wallpaper") },
+    { label: "Clean Up", action: () => console.log("Clean Up"), disabled: true },
+    { separator: true },
+    { label: "Refresh", action: () => window.location.reload() },
+  ];
+
   if (!isLoaded) return <div className="min-h-screen bg-neutral-950" />;
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div
+      className="relative min-h-screen overflow-hidden"
+      onContextMenu={handleContextMenu}
+      onClick={() => setContextMenu(null)}
+    >
       {/* wallpaper */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -202,8 +257,9 @@ export default function Desktop() {
               onFocus={focus}
               onClose={close}
               onMinimize={minimize}
-              onResize={(size) => updateWindow(w.instanceId, { size })}
-              onDrag={(position) => updateWindow(w.instanceId, { position })}
+              onMaximize={maximize}
+              onResize={(size) => updateWindow(w.instanceId, { size, isMaximized: false })}
+              onDrag={(position) => updateWindow(w.instanceId, { position, isMaximized: false })}
             >
               <AppContent appId={w.appId} />
             </Window>
@@ -212,6 +268,14 @@ export default function Desktop() {
       </div>
 
       <Dock windows={windows} onOpenApp={openApp} onRestoreWindow={restore} />
+
+      {contextMenu && (
+        <ContextMenu
+          position={contextMenu}
+          onClose={() => setContextMenu(null)}
+          items={menuItems}
+        />
+      )}
     </div>
   );
 }

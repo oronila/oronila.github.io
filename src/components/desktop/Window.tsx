@@ -10,6 +10,7 @@ export default function Window({
   onFocus,
   onClose,
   onMinimize,
+  onMaximize,
   onResize,
   onDrag,
   children,
@@ -18,6 +19,7 @@ export default function Window({
   onFocus: (instanceId: string) => void;
   onClose: (instanceId: string) => void;
   onMinimize: (instanceId: string) => void;
+  onMaximize: (instanceId: string) => void;
   onResize: (size: { width: number; height: number }) => void;
   onDrag: (position: { x: number; y: number }) => void;
   children: React.ReactNode;
@@ -39,8 +41,8 @@ export default function Window({
       <div
         ref={nodeRef}
         className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
-        style={{ 
-          zIndex: win.zIndex 
+        style={{
+          zIndex: win.zIndex
         }}
         role="dialog"
         aria-label={win.title}
@@ -99,6 +101,14 @@ export default function Window({
                   className="h-4 w-4 bg-[#ffbd2e] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
                   aria-label="Minimize"
                 />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMaximize(win.instanceId);
+                  }}
+                  className="h-4 w-4 bg-[#28c840] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
+                  aria-label="Maximize"
+                />
               </div>
               <span className="text-[10px] font-medium text-neutral-100 uppercase tracking-tighter">
                 {win.title}
@@ -108,7 +118,7 @@ export default function Window({
               NoorOS v1.0
             </div>
           </div>
-          
+
           {/* Content Area */}
           <div className="flex-1 overflow-hidden relative bg-neutral-900">
             {children}

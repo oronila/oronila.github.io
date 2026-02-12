@@ -22,5 +22,10 @@ export type WindowInstance = {
   zIndex: number;
   position: { x: number; y: number };
   size: { width: number; height: number };
+  isMaximized?: boolean;
+  restoreState?: {
+    position: { x: number; y: number };
+    size: { width: number; height: number };
+  };
 };
 
