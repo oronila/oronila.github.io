@@ -25,6 +25,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Prevent scrollbars in desktop-shell mode */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 /* mac-like minimize animation to bottom dock */
 @keyframes minimizeToDock {
   0% {
