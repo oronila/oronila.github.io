@@ -37,14 +37,14 @@ function DesktopIconView({
     >
       <div
         ref={nodeRef}
-        className="absolute z-10 flex w-24 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
+        className="absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
         onDoubleClick={() => onOpen(icon.id)}
       >
         <div
-          className="flex h-14 w-14 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
+          className="flex h-12 w-12 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
           style={{ borderColor: `${icon.color}40` }}
         >
-          <PixelIcon name={APP_CONFIG[icon.id].icon} color={icon.color} />
+          <PixelIcon name={APP_CONFIG[icon.id].icon} color={icon.color} className="w-7 h-7" />
         </div>
         <div className="text-center text-[10px] leading-tight text-neutral-100 font-medium drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] uppercase tracking-tighter">
           {icon.title}
