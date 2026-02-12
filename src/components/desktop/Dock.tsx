@@ -9,16 +9,19 @@ function DockIcon({
   active,
   onClick,
   color,
+  onContextMenu,
 }: {
   appId: AppId;
   label: string;
   active: boolean;
   onClick: () => void;
   color: string;
+  onContextMenu?: (e: React.MouseEvent) => void;
 }) {
   return (
     <button
       onClick={onClick}
+      onContextMenu={onContextMenu}
       className={[
         "relative flex h-12 w-12 items-center justify-center transition-all duration-100",
         "bg-black/40 hover:bg-black/60 active:bg-black/80 hover:-translate-y-1",
@@ -44,10 +47,12 @@ export default function Dock({
   windows,
   onOpenApp,
   onRestoreWindow,
+  onContextMenu,
 }: {
   windows: WindowInstance[];
   onOpenApp: (appId: AppId) => void;
   onRestoreWindow: (instanceId: string) => void;
+  onContextMenu: (appId: AppId, e: React.MouseEvent) => void;
 }) {
   const running = new Map<AppId, WindowInstance[]>();
   for (const w of windows) {
@@ -82,6 +87,7 @@ export default function Dock({
                 if (minimized) return onRestoreWindow(minimized.instanceId);
                 return onOpenApp(id);
               }}
+              onContextMenu={(e: React.MouseEvent) => onContextMenu(id, e)}
             />
           );
         })}

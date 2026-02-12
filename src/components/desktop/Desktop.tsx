@@ -22,10 +22,12 @@ function DesktopIconView({
   icon,
   onOpen,
   onMove,
+  onContextMenu,
 }: {
   icon: DesktopIcon;
   onOpen: (appId: AppId) => void;
   onMove: (id: AppId, pos: { x: number; y: number }) => void;
+  onContextMenu: (id: AppId, e: React.MouseEvent) => void;
 }) {
   const nodeRef = useRef(null);
 
@@ -40,6 +42,7 @@ function DesktopIconView({
         ref={nodeRef}
         className="absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
         onDoubleClick={() => onOpen(icon.id)}
+        onContextMenu={(e) => onContextMenu(icon.id, e)}
       >
         <div
           className="flex h-12 w-12 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
@@ -71,7 +74,7 @@ export default function Desktop() {
   ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: MenuItem[] } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load persistence
@@ -205,10 +208,39 @@ export default function Desktop() {
 
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
+    setContextMenu({ x: e.clientX, y: e.clientY, items: BACKGROUND_MENU_ITEMS });
   }
 
-  const menuItems: MenuItem[] = [
+  function handleIconContextMenu(id: AppId, e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation(); // Stop background menu
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      items: [
+        { label: "Open", action: () => openApp(id) },
+        { label: "Get Info", action: () => console.log("Get Info", id) },
+        { separator: true },
+        { label: "Delete", action: () => console.log("Delete", id), disabled: true },
+      ]
+    });
+  }
+
+  function handleDockContextMenu(id: AppId, e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      items: [
+        { label: "Open", action: () => openApp(id) },
+        { separator: true },
+        { label: "Keep in Dock", disabled: true }, // Already in dock logic
+      ]
+    });
+  }
+
+  const BACKGROUND_MENU_ITEMS: MenuItem[] = [
     { label: "New Folder", action: () => console.log("New Folder") },
     { label: "Get Info", action: () => console.log("Get Info") },
     { separator: true },
@@ -244,6 +276,7 @@ export default function Desktop() {
             icon={icon}
             onOpen={openApp}
             onMove={moveIcon}
+            onContextMenu={handleIconContextMenu}
           />
         ))}
       </div>
@@ -267,13 +300,18 @@ export default function Desktop() {
         ))}
       </div>
 
-      <Dock windows={windows} onOpenApp={openApp} onRestoreWindow={restore} />
+      <Dock
+        windows={windows}
+        onOpenApp={openApp}
+        onRestoreWindow={restore}
+        onContextMenu={handleDockContextMenu}
+      />
 
       {contextMenu && (
         <ContextMenu
           position={contextMenu}
           onClose={() => setContextMenu(null)}
-          items={menuItems}
+          items={contextMenu.items}
         />
       )}
     </div>
