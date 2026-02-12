@@ -10,6 +10,8 @@ export type DesktopIcon = {
   id: AppId;
   title: string;
   subtitle?: string;
+  position: { x: number; y: number };
+  color: string;
 };
 
 export type WindowInstance = {

@@ -38,7 +38,7 @@ export default function Window({
     >
       <div
         ref={nodeRef}
-        className="fixed rounded-2xl border border-white/10 bg-neutral-950/70 shadow-2xl backdrop-blur-xl flex flex-col overflow-hidden"
+        className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
         style={{ 
           zIndex: win.zIndex 
         }}
@@ -79,16 +79,16 @@ export default function Window({
           {/* Title Bar */}
           <div
             data-window-handle
-            className="flex h-11 items-center justify-between border-b border-white/10 px-4 cursor-default select-none shrink-0"
+            className="flex h-10 items-center justify-between border-b-4 border-black bg-neutral-800 px-3 cursor-default select-none shrink-0"
           >
-            <div className="flex items-center gap-2">
-              <div className="flex gap-1.5">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onClose(win.instanceId);
                   }}
-                  className="h-3 w-3 rounded-full bg-[#ff5f57] border border-black/10 hover:brightness-110 active:brightness-90 transition-all"
+                  className="h-4 w-4 bg-[#ff5f57] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
                   aria-label="Close"
                 />
                 <button
@@ -96,25 +96,21 @@ export default function Window({
                     e.stopPropagation();
                     onMinimize(win.instanceId);
                   }}
-                  className="h-3 w-3 rounded-full bg-[#ffbd2e] border border-black/10 hover:brightness-110 active:brightness-90 transition-all"
+                  className="h-4 w-4 bg-[#ffbd2e] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
                   aria-label="Minimize"
                 />
-                <button
-                  className="h-3 w-3 rounded-full bg-[#28c940] border border-black/10 hover:brightness-110 active:brightness-90 transition-all opacity-50 cursor-not-allowed"
-                  aria-label="Maximize"
-                />
               </div>
-              <span className="ml-3 text-[13px] font-medium text-neutral-300 tracking-tight">
+              <span className="text-[10px] font-medium text-neutral-100 uppercase tracking-tighter">
                 {win.title}
               </span>
             </div>
-            <div className="text-[10px] font-bold text-neutral-500 tracking-widest uppercase opacity-50">
-              NoorOS
+            <div className="text-[8px] font-bold text-neutral-400 tracking-tighter uppercase opacity-80">
+              NoorOS v1.0
             </div>
           </div>
           
           {/* Content Area */}
-          <div className="flex-1 overflow-hidden relative">
+          <div className="flex-1 overflow-hidden relative bg-neutral-900">
             {children}
           </div>
         </Resizable>

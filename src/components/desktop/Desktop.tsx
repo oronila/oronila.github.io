@@ -1,97 +1,125 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
-import { 
-  FileText, 
-  Folder, 
-  FileUser, 
-  Terminal as TerminalIcon, 
-  Music as MusicIcon, 
-  Globe 
-} from "lucide-react";
+import { useMemo, useState, useEffect, useRef } from "react";
+import Draggable from "react-draggable";
 import Dock from "./Dock";
 import Window from "./Window";
 import { AppContent, getDefaultTitle } from "./apps";
 import type { AppId, DesktopIcon, WindowInstance } from "./types";
 
 const STORAGE_KEY = "nooros_windows_v1";
+const ICONS_STORAGE_KEY = "nooros_icons_v1";
 
 function makeId() {
   return Math.random().toString(16).slice(2);
 }
 
-function getAppIcon(appId: AppId) {
+function PixelIcon({ name, color }: { name: string; color: string }) {
+  const iconUrl = `/icons/pixel/${name}.svg`;
+  return (
+    <div 
+      className="w-8 h-8 [image-rendering:pixelated]"
+      style={{
+        backgroundColor: color,
+        maskImage: `url(${iconUrl})`,
+        WebkitMaskImage: `url(${iconUrl})`,
+        maskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        maskPosition: 'center',
+      }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function getAppIconName(appId: AppId) {
   switch (appId) {
-    case "about":
-      return <FileText className="w-6 h-6 text-blue-400" />;
-    case "projects":
-      return <Folder className="w-6 h-6 text-yellow-400" />;
-    case "resume":
-      return <FileUser className="w-6 h-6 text-green-400" />;
-    case "terminal":
-      return <TerminalIcon className="w-6 h-6 text-emerald-400" />;
-    case "music":
-      return <MusicIcon className="w-6 h-6 text-purple-400" />;
-    case "contact":
-      return <Globe className="w-6 h-6 text-sky-400" />;
-    default:
-      return <FileText className="w-6 h-6" />;
+    case "about": return "user";
+    case "projects": return "folder";
+    case "resume": return "article";
+    case "terminal": return "command";
+    case "music": return "music";
+    case "contact": return "link";
+    default: return "article";
   }
 }
 
 function DesktopIconView({
   icon,
   onOpen,
+  onMove,
 }: {
   icon: DesktopIcon;
   onOpen: (appId: AppId) => void;
+  onMove: (id: AppId, pos: { x: number; y: number }) => void;
 }) {
+  const nodeRef = useRef(null);
+  
   return (
-    <button
-      onDoubleClick={() => onOpen(icon.id)}
-      className="group flex w-24 flex-col items-center gap-2 rounded-xl p-2 hover:bg-white/5 active:bg-white/10 transition-colors"
+    <Draggable
+      nodeRef={nodeRef}
+      position={icon.position}
+      onStop={(_, data) => onMove(icon.id, { x: data.x, y: data.y })}
+      bounds="parent"
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md group-hover:scale-105 transition-transform duration-200">
-        {getAppIcon(icon.id)}
-      </div>
-      <div className="text-center text-[12px] leading-tight text-neutral-100 font-medium drop-shadow-sm">
-        {icon.title}
-      </div>
-      {icon.subtitle && (
-        <div className="-mt-1 text-center text-[11px] text-neutral-400">
-          {icon.subtitle}
+      <div
+        ref={nodeRef}
+        className="absolute z-10 flex w-24 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
+        onDoubleClick={() => onOpen(icon.id)}
+      >
+        <div 
+          className="flex h-14 w-14 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
+          style={{ borderColor: `${icon.color}40` }}
+        >
+          <PixelIcon name={getAppIconName(icon.id)} color={icon.color} />
         </div>
-      )}
-    </button>
+        <div className="text-center text-[10px] leading-tight text-neutral-100 font-medium drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] uppercase tracking-tighter">
+          {icon.title}
+        </div>
+        {icon.subtitle && (
+          <div className="-mt-1 text-center text-[11px] text-neutral-400">
+            {icon.subtitle}
+          </div>
+        )}
+      </div>
+    </Draggable>
   );
 }
 
 export default function Desktop() {
-  const icons: DesktopIcon[] = useMemo(
-    () => [
-      { id: "about", title: "About.txt" },
-      { id: "projects", title: "Projects" },
-      { id: "resume", title: "Resume.pdf" },
-      { id: "terminal", title: "Terminal" },
-      { id: "music", title: "Music" },
-      { id: "contact", title: "Browser" },
-    ],
-    [],
-  );
+  const [icons, setIcons] = useState<DesktopIcon[]>([
+    { id: "about", title: "About.txt", position: { x: 20, y: 20 }, color: "#38bdf8" },
+    { id: "projects", title: "Projects", position: { x: 20, y: 140 }, color: "#fbbf24" },
+    { id: "resume", title: "Resume.pdf", position: { x: 20, y: 260 }, color: "#34d399" },
+    { id: "terminal", title: "Terminal", position: { x: 140, y: 20 }, color: "#f87171" },
+    { id: "music", title: "Music", position: { x: 140, y: 140 }, color: "#a78bfa" },
+    { id: "contact", title: "Browser", position: { x: 140, y: 260 }, color: "#22d3ee" },
+  ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load persistence
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    const savedWindows = localStorage.getItem(STORAGE_KEY);
+    const savedIcons = localStorage.getItem(ICONS_STORAGE_KEY);
+    
+    if (savedWindows) {
       try {
-        setWindows(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to load windows", e);
-      }
+        setWindows(JSON.parse(savedWindows));
+      } catch (e) { console.error("Failed to load windows", e); }
     }
+    
+    if (savedIcons) {
+      try {
+        const parsedIcons = JSON.parse(savedIcons);
+        setIcons(prev => prev.map(defaultIcon => {
+          const savedIcon = parsedIcons.find((s: any) => s.id === defaultIcon.id);
+          return savedIcon ? { ...defaultIcon, position: savedIcon.position } : defaultIcon;
+        }));
+      } catch (e) { console.error("Failed to load icons", e); }
+    }
+    
     setIsLoaded(true);
   }, []);
 
@@ -99,13 +127,18 @@ export default function Desktop() {
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(windows));
+      localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(icons));
     }
-  }, [windows, isLoaded]);
+  }, [windows, icons, isLoaded]);
 
   const topZ = useMemo(
     () => windows.reduce((m, w) => Math.max(m, w.zIndex), 10),
     [windows],
   );
+
+  function moveIcon(id: AppId, position: { x: number; y: number }) {
+    setIcons(prev => prev.map(icon => icon.id === id ? { ...icon, position } : icon));
+  }
 
   function openApp(appId: AppId) {
     const existing = windows.find((w) => w.appId === appId);
@@ -166,32 +199,42 @@ export default function Desktop() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* wallpaper */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_800px_at_20%_10%,rgba(255,255,255,0.12),transparent_60%),radial-gradient(900px_600px_at_80%_40%,rgba(56,189,248,0.16),transparent_60%),radial-gradient(1000px_700px_at_40%_90%,rgba(168,85,247,0.14),transparent_60%)]" />
-      <div className="absolute inset-0 bg-neutral-950" style={{ opacity: 0.72 }} />
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ 
+          backgroundImage: "url('/pixel-bg.png')",
+          imageRendering: "pixelated"
+        }} 
+      />
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
       {/* desktop icons */}
-      <div className="relative z-10 p-6">
-        <div className="grid w-fit grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
-          {icons.map((icon) => (
-            <DesktopIconView key={icon.id} icon={icon} onOpen={openApp} />
-          ))}
-        </div>
+      <div className="absolute inset-0 z-10 p-6 overflow-hidden pointer-events-none">
+        {icons.map((icon) => (
+          <DesktopIconView 
+            key={icon.id} 
+            icon={icon} 
+            onOpen={openApp} 
+            onMove={moveIcon}
+          />
+        ))}
       </div>
 
       {/* windows */}
-      <div className="relative z-20">
+      <div className="absolute inset-0 z-20 pointer-events-none">
         {windows.map((w) => (
-          <Window
-            key={w.instanceId}
-            win={w}
-            onFocus={focus}
-            onClose={close}
-            onMinimize={minimize}
-            onResize={(size) => updateWindow(w.instanceId, { size })}
-            onDrag={(position) => updateWindow(w.instanceId, { position })}
-          >
-            <AppContent appId={w.appId} />
-          </Window>
+          <div key={w.instanceId} className="pointer-events-auto">
+            <Window
+              win={w}
+              onFocus={focus}
+              onClose={close}
+              onMinimize={minimize}
+              onResize={(size) => updateWindow(w.instanceId, { size })}
+              onDrag={(position) => updateWindow(w.instanceId, { position })}
+            >
+              <AppContent appId={w.appId} />
+            </Window>
+          </div>
         ))}
       </div>
 

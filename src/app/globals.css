@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +23,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-pixel), Arial, Helvetica, sans-serif;
 }
 
 /* Prevent scrollbars in desktop-shell mode */
@@ -30,6 +31,20 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+}
+
+/* Pixel art specific styles */
+.pixel-border {
+  border: 4px solid black;
+  box-shadow: 
+    inset -4px -4px 0px 0px rgba(0,0,0,0.1),
+    4px 4px 0px 0px rgba(0,0,0,0.2);
+}
+
+.pixel-text {
+  image-rendering: pixelated;
+  font-family: var(--font-pixel);
+  letter-spacing: 0.05em;
 }
 
 /* mac-like minimize animation to bottom dock */
