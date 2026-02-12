@@ -34,17 +34,29 @@ function DesktopIconView({
   onSelect: (id: AppId, multi: boolean) => void;
 }) {
   const nodeRef = useRef(null);
+  const isDragging = useRef(false);
 
   return (
     <Draggable
       nodeRef={nodeRef}
       position={icon.position}
-      onDrag={(_, data) => onDrag(icon.id, { x: data.deltaX, y: data.deltaY })}
+      onDrag={(_, data) => {
+        isDragging.current = true;
+        onDrag(icon.id, { x: data.deltaX, y: data.deltaY });
+      }}
       onStart={(e) => {
+        isDragging.current = false;
         // If dragging an unselected item, select it exclusively
         if (!selected) {
           onSelect(icon.id, (e as MouseEvent).metaKey || (e as MouseEvent).shiftKey);
         }
+      }}
+      onStop={() => {
+        // We need to allow the click event to fire if it wasn't a drag
+        // The click event fires after onStop
+        setTimeout(() => {
+          isDragging.current = false;
+        }, 0);
       }}
       bounds="parent"
     >
@@ -55,6 +67,7 @@ function DesktopIconView({
         onDoubleClick={() => onOpen(icon.id)}
         onClick={(e) => {
           e.stopPropagation();
+          if (isDragging.current) return;
           onSelect(icon.id, e.metaKey || e.shiftKey);
         }}
         onContextMenu={(e) => onContextMenu(icon.id, e)}
@@ -86,6 +99,7 @@ export default function Desktop() {
     { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 20 }, color: APP_CONFIG.terminal.color },
     { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 140 }, color: APP_CONFIG.music.color },
     { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 260 }, color: APP_CONFIG.contact.color },
+    { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 380 }, color: APP_CONFIG.trash.color },
   ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -383,7 +397,7 @@ export default function Desktop() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/pixel-bg.png')",
+          backgroundImage: "url('/pixel-background.gif')",
           imageRendering: "pixelated"
         }}
       />

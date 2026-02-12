@@ -7,6 +7,7 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   terminal: { title: "Terminal", icon: "command", color: "#f87171" },
   music: { title: "Music", icon: "music", color: "#a78bfa" },
   contact: { title: "Browser", icon: "link", color: "#22d3ee" },
+  trash: { title: "Trash", icon: "trash", color: "#ef4444" },
 };
 
 function AppFrame({
@@ -38,6 +39,8 @@ export function getDefaultTitle(appId: AppId) {
       return "Music";
     case "contact":
       return "Contact (Browser)";
+    case "trash":
+      return "Trash";
     default:
       return "App";
   }
@@ -85,6 +88,12 @@ export function AppContent({ appId }: { appId: AppId }) {
           <p>
             A “browser-style” contact app coming next (links, email, socials).
           </p>
+        </AppFrame>
+      );
+    case "trash":
+      return (
+        <AppFrame title="Trash">
+          <p>Trash is empty.</p>
         </AppFrame>
       );
   }

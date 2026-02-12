@@ -4,7 +4,8 @@ export type AppId =
   | "resume"
   | "terminal"
   | "music"
-  | "contact";
+  | "contact"
+  | "trash";
 
 export type DesktopIcon = {
   id: AppId;
