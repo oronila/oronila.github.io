@@ -4,7 +4,8 @@ import { useMemo, useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import Dock from "./Dock";
 import Window from "./Window";
-import { AppContent, getDefaultTitle } from "./apps";
+import { AppContent, APP_CONFIG, getDefaultTitle } from "./apps";
+import { PixelIcon } from "./PixelIcon";
 import type { AppId, DesktopIcon, WindowInstance } from "./types";
 
 const STORAGE_KEY = "nooros_windows_v1";
@@ -14,35 +15,7 @@ function makeId() {
   return Math.random().toString(16).slice(2);
 }
 
-function PixelIcon({ name, color }: { name: string; color: string }) {
-  const iconUrl = `/icons/pixel/${name}.svg`;
-  return (
-    <div 
-      className="w-8 h-8 [image-rendering:pixelated]"
-      style={{
-        backgroundColor: color,
-        maskImage: `url(${iconUrl})`,
-        WebkitMaskImage: `url(${iconUrl})`,
-        maskSize: 'contain',
-        maskRepeat: 'no-repeat',
-        maskPosition: 'center',
-      }}
-      aria-hidden="true"
-    />
-  );
-}
 
-function getAppIconName(appId: AppId) {
-  switch (appId) {
-    case "about": return "user";
-    case "projects": return "folder";
-    case "resume": return "article";
-    case "terminal": return "command";
-    case "music": return "music";
-    case "contact": return "link";
-    default: return "article";
-  }
-}
 
 function DesktopIconView({
   icon,
@@ -54,7 +27,7 @@ function DesktopIconView({
   onMove: (id: AppId, pos: { x: number; y: number }) => void;
 }) {
   const nodeRef = useRef(null);
-  
+
   return (
     <Draggable
       nodeRef={nodeRef}
@@ -67,11 +40,11 @@ function DesktopIconView({
         className="absolute z-10 flex w-24 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
         onDoubleClick={() => onOpen(icon.id)}
       >
-        <div 
+        <div
           className="flex h-14 w-14 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
           style={{ borderColor: `${icon.color}40` }}
         >
-          <PixelIcon name={getAppIconName(icon.id)} color={icon.color} />
+          <PixelIcon name={APP_CONFIG[icon.id].icon} color={icon.color} />
         </div>
         <div className="text-center text-[10px] leading-tight text-neutral-100 font-medium drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] uppercase tracking-tighter">
           {icon.title}
@@ -88,12 +61,12 @@ function DesktopIconView({
 
 export default function Desktop() {
   const [icons, setIcons] = useState<DesktopIcon[]>([
-    { id: "about", title: "About.txt", position: { x: 20, y: 20 }, color: "#38bdf8" },
-    { id: "projects", title: "Projects", position: { x: 20, y: 140 }, color: "#fbbf24" },
-    { id: "resume", title: "Resume.pdf", position: { x: 20, y: 260 }, color: "#34d399" },
-    { id: "terminal", title: "Terminal", position: { x: 140, y: 20 }, color: "#f87171" },
-    { id: "music", title: "Music", position: { x: 140, y: 140 }, color: "#a78bfa" },
-    { id: "contact", title: "Browser", position: { x: 140, y: 260 }, color: "#22d3ee" },
+    { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 20 }, color: APP_CONFIG.about.color },
+    { id: "projects", title: APP_CONFIG.projects.title, position: { x: 20, y: 140 }, color: APP_CONFIG.projects.color },
+    { id: "resume", title: APP_CONFIG.resume.title, position: { x: 20, y: 260 }, color: APP_CONFIG.resume.color },
+    { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 20 }, color: APP_CONFIG.terminal.color },
+    { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 140 }, color: APP_CONFIG.music.color },
+    { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 260 }, color: APP_CONFIG.contact.color },
   ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -103,13 +76,13 @@ export default function Desktop() {
   useEffect(() => {
     const savedWindows = localStorage.getItem(STORAGE_KEY);
     const savedIcons = localStorage.getItem(ICONS_STORAGE_KEY);
-    
+
     if (savedWindows) {
       try {
         setWindows(JSON.parse(savedWindows));
       } catch (e) { console.error("Failed to load windows", e); }
     }
-    
+
     if (savedIcons) {
       try {
         const parsedIcons = JSON.parse(savedIcons);
@@ -119,7 +92,7 @@ export default function Desktop() {
         }));
       } catch (e) { console.error("Failed to load icons", e); }
     }
-    
+
     setIsLoaded(true);
   }, []);
 
@@ -199,22 +172,22 @@ export default function Desktop() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* wallpaper */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
+        style={{
           backgroundImage: "url('/pixel-bg.png')",
           imageRendering: "pixelated"
-        }} 
+        }}
       />
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
       {/* desktop icons */}
       <div className="absolute inset-0 z-10 p-6 overflow-hidden pointer-events-none">
         {icons.map((icon) => (
-          <DesktopIconView 
-            key={icon.id} 
-            icon={icon} 
-            onOpen={openApp} 
+          <DesktopIconView
+            key={icon.id}
+            icon={icon}
+            onOpen={openApp}
             onMove={moveIcon}
           />
         ))}
