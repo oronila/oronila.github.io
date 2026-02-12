@@ -11,10 +11,12 @@ export function ContextMenu({
     position,
     onClose,
     items,
+    direction = 'down',
 }: {
     position: { x: number; y: number };
     onClose: () => void;
     items: MenuItem[];
+    direction?: 'up' | 'down';
 }) {
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +39,10 @@ export function ContextMenu({
             className="fixed z-[9999] min-w-[200px] flex flex-col bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] py-1"
             style={{
                 left: position.x,
-                top: position.y,
+                ...(direction === 'up'
+                    ? { bottom: window.innerHeight - position.y }
+                    : { top: position.y }
+                ),
             }}
             onContextMenu={(e) => e.preventDefault()}
         >

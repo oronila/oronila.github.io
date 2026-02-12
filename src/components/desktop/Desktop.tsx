@@ -23,11 +23,15 @@ function DesktopIconView({
   onOpen,
   onMove,
   onContextMenu,
+  selected,
+  onSelect,
 }: {
   icon: DesktopIcon;
   onOpen: (appId: AppId) => void;
   onMove: (id: AppId, pos: { x: number; y: number }) => void;
   onContextMenu: (id: AppId, e: React.MouseEvent) => void;
+  selected: boolean;
+  onSelect: (id: AppId, multi: boolean) => void;
 }) {
   const nodeRef = useRef(null);
 
@@ -40,8 +44,13 @@ function DesktopIconView({
     >
       <div
         ref={nodeRef}
-        className="absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 hover:bg-white/10 active:bg-white/20 transition-colors group pointer-events-auto"
+        className={`absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 transition-colors group pointer-events-auto ${selected ? "bg-white/20 border border-white/10 rounded" : "hover:bg-white/10 active:bg-white/20"
+          }`}
         onDoubleClick={() => onOpen(icon.id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(icon.id, e.metaKey || e.shiftKey);
+        }}
         onContextMenu={(e) => onContextMenu(icon.id, e)}
       >
         <div
@@ -74,7 +83,9 @@ export default function Desktop() {
   ]);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: MenuItem[] } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: MenuItem[]; direction?: 'up' | 'down' } | null>(null);
+  const [selectedIds, setSelectedIds] = useState<AppId[]>([]);
+  const [selectionBox, setSelectionBox] = useState<{ start: { x: number; y: number }; current: { x: number; y: number } } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load persistence
@@ -208,12 +219,19 @@ export default function Desktop() {
 
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
+    if (selectionBox) return; // Don't show menu if dragging selection
     setContextMenu({ x: e.clientX, y: e.clientY, items: BACKGROUND_MENU_ITEMS });
   }
 
   function handleIconContextMenu(id: AppId, e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation(); // Stop background menu
+
+    // Select if not already selected
+    if (!selectedIds.includes(id)) {
+      setSelectedIds([id]);
+    }
+
     setContextMenu({
       x: e.clientX,
       y: e.clientY,
@@ -226,6 +244,70 @@ export default function Desktop() {
     });
   }
 
+  function handleIconSelect(id: AppId, multi: boolean) {
+    if (multi) {
+      setSelectedIds((prev) =>
+        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      );
+    } else {
+      setSelectedIds([id]);
+    }
+  }
+
+  function handleMouseDown(e: React.MouseEvent) {
+    // Only start selection on background click
+    if ((e.target as HTMLElement).closest(".pointer-events-auto")) return;
+
+    setContextMenu(null);
+    setSelectedIds([]); // Clear selection on background click
+    setSelectionBox({
+      start: { x: e.clientX, y: e.clientY },
+      current: { x: e.clientX, y: e.clientY },
+    });
+  }
+
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!selectionBox) return;
+
+    const current = { x: e.clientX, y: e.clientY };
+    setSelectionBox({ ...selectionBox, current });
+
+    // Calculate selection intersection
+    const left = Math.min(selectionBox.start.x, current.x);
+    const top = Math.min(selectionBox.start.y, current.y);
+    const width = Math.abs(current.x - selectionBox.start.x);
+    const height = Math.abs(current.y - selectionBox.start.y);
+
+    const nextSelected: AppId[] = [];
+
+    // Check each icon
+    // Note: This relies on icons state having positions. 
+    // We assume icon size is roughly 80x80 (w-20 is 5rem = 80px)
+    icons.forEach((icon) => {
+      const iconRight = icon.position.x + 80;
+      const iconBottom = icon.position.y + 80;
+
+      // Simple AABB intersection
+      const intersects =
+        icon.position.x < left + width &&
+        iconRight > left &&
+        icon.position.y < top + height &&
+        iconBottom > top;
+
+      if (intersects) {
+        nextSelected.push(icon.id);
+      }
+    });
+
+    setSelectedIds(nextSelected);
+  }
+
+  function handleMouseUp() {
+    if (selectionBox) {
+      setSelectionBox(null);
+    }
+  }
+
   function handleDockContextMenu(id: AppId, e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -236,7 +318,8 @@ export default function Desktop() {
         { label: "Open", action: () => openApp(id) },
         { separator: true },
         { label: "Keep in Dock", disabled: true }, // Already in dock logic
-      ]
+      ],
+      direction: 'up',
     });
   }
 
@@ -254,9 +337,11 @@ export default function Desktop() {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden"
+      className="relative min-h-screen overflow-hidden select-none"
       onContextMenu={handleContextMenu}
-      onClick={() => setContextMenu(null)}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       {/* wallpaper */}
       <div
@@ -277,6 +362,8 @@ export default function Desktop() {
             onOpen={openApp}
             onMove={moveIcon}
             onContextMenu={handleIconContextMenu}
+            selected={selectedIds.includes(icon.id)}
+            onSelect={handleIconSelect}
           />
         ))}
       </div>
@@ -312,6 +399,20 @@ export default function Desktop() {
           position={contextMenu}
           onClose={() => setContextMenu(null)}
           items={contextMenu.items}
+          direction={contextMenu.direction}
+        />
+      )}
+
+      {/* Selection Box */}
+      {selectionBox && (
+        <div
+          className="absolute z-50 border border-white/30 bg-white/10 pointer-events-none"
+          style={{
+            left: Math.min(selectionBox.start.x, selectionBox.current.x),
+            top: Math.min(selectionBox.start.y, selectionBox.current.y),
+            width: Math.abs(selectionBox.current.x - selectionBox.start.x),
+            height: Math.abs(selectionBox.current.y - selectionBox.start.y),
+          }}
         />
       )}
     </div>
