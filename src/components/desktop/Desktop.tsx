@@ -21,14 +21,14 @@ function makeId() {
 function DesktopIconView({
   icon,
   onOpen,
-  onMove,
+  onDrag,
   onContextMenu,
   selected,
   onSelect,
 }: {
   icon: DesktopIcon;
   onOpen: (appId: AppId) => void;
-  onMove: (id: AppId, pos: { x: number; y: number }) => void;
+  onDrag: (id: AppId, delta: { x: number; y: number }) => void;
   onContextMenu: (id: AppId, e: React.MouseEvent) => void;
   selected: boolean;
   onSelect: (id: AppId, multi: boolean) => void;
@@ -39,12 +39,18 @@ function DesktopIconView({
     <Draggable
       nodeRef={nodeRef}
       position={icon.position}
-      onStop={(_, data) => onMove(icon.id, { x: data.x, y: data.y })}
+      onDrag={(_, data) => onDrag(icon.id, { x: data.deltaX, y: data.deltaY })}
+      onStart={(e) => {
+        // If dragging an unselected item, select it exclusively
+        if (!selected) {
+          onSelect(icon.id, (e as MouseEvent).metaKey || (e as MouseEvent).shiftKey);
+        }
+      }}
       bounds="parent"
     >
       <div
         ref={nodeRef}
-        className={`absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 transition-colors group pointer-events-auto ${selected ? "bg-white/20 border border-white/10 rounded" : "hover:bg-white/10 active:bg-white/20"
+        className={`absolute z-10 flex w-20 cursor-default select-none flex-col items-center gap-2 p-2 transition-colors group pointer-events-auto ${selected ? "bg-white/20 border border-white/10" : "hover:bg-white/10 active:bg-white/20"
           }`}
         onDoubleClick={() => onOpen(icon.id)}
         onClick={(e) => {
@@ -217,6 +223,36 @@ export default function Desktop() {
     focus(instanceId);
   }
 
+  function handleIconDrag(id: AppId, delta: { x: number; y: number }) {
+    setIcons((prev) => prev.map((icon) => {
+      // If the dragged icon is selected, move all selected icons
+      // If the dragged icon is NOT selected (should rely on onStart to select it),
+      // effectively we just move those that are selected.
+      // Since onStart runs before onDrag, we can trust selectedIds.
+
+      const isSelected = selectedIds.includes(icon.id);
+      const isDragged = icon.id === id;
+
+      // If we are dragging a selected item, move all selected items
+      if (selectedIds.includes(id) && isSelected) {
+        return {
+          ...icon,
+          position: { x: icon.position.x + delta.x, y: icon.position.y + delta.y }
+        };
+      }
+
+      // Fallback: if somehow dragging unselected (shouldn't happen with onStart logic), just move it
+      if (isDragged) {
+        return {
+          ...icon,
+          position: { x: icon.position.x + delta.x, y: icon.position.y + delta.y }
+        };
+      }
+
+      return icon;
+    }));
+  }
+
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
     if (selectionBox) return; // Don't show menu if dragging selection
@@ -360,7 +396,7 @@ export default function Desktop() {
             key={icon.id}
             icon={icon}
             onOpen={openApp}
-            onMove={moveIcon}
+            onDrag={handleIconDrag}
             onContextMenu={handleIconContextMenu}
             selected={selectedIds.includes(icon.id)}
             onSelect={handleIconSelect}
