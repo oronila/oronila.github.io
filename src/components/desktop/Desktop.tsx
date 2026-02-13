@@ -305,6 +305,9 @@ export default function Desktop() {
   }
 
   function handleMouseDown(e: React.MouseEvent) {
+    // Ignore right-clicks (context menu)
+    if (e.button === 2) return;
+
     // Only start selection on background click
     if ((e.target as HTMLElement).closest(".pointer-events-auto")) return;
 

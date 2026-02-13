@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Noor Ali",
   description: "Noor Ali | Personal site",
   icons: {
-    icon: "/icon.svg",
+    icon: "/icons/pixel/user.svg",
   },
 };
 
