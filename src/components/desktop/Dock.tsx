@@ -22,15 +22,10 @@ function DockIcon({
     <button
       onClick={onClick}
       onContextMenu={onContextMenu}
-      className={[
-        "relative flex h-12 w-12 items-center justify-center transition-all duration-100",
-        "bg-black/40 hover:bg-black/60 active:bg-black/80 hover:-translate-y-1",
-        "border-2 border-white/20 group shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]",
-      ].join(" ")}
-      style={{ borderColor: `${color}40` }}
+      className={`group relative flex h-12 w-12 cursor-pointer items-center justify-center transition-all hover:-translate-y-1 hover:brightness-110 active:translate-y-0 active:brightness-90`}
       aria-label={label}
     >
-      <PixelIcon name={APP_CONFIG[appId].icon} color={color} size={24} className="" />
+      <PixelIcon name={APP_CONFIG[appId].icon} color={color} className="w-10 h-10" />
       {active && (
         <span className="absolute -bottom-1.5 h-1 w-3 bg-white/70 shadow-[0_0_4px_rgba(255,255,255,0.5)]" />
       )}

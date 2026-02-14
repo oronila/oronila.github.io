@@ -7,10 +7,11 @@ import Dock from "./Dock";
 import Window from "./Window";
 import { AppContent, APP_CONFIG, getDefaultTitle } from "./apps";
 import { PixelIcon } from "./PixelIcon";
+import TopBar from "./TopBar";
 import type { AppId, DesktopIcon, WindowInstance } from "./types";
 
-const STORAGE_KEY = "nooros_windows_v1";
-const ICONS_STORAGE_KEY = "nooros_icons_v1";
+const STORAGE_KEY = "nooros_windows_v2";
+const ICONS_STORAGE_KEY = "nooros_icons_v2";
 
 function makeId() {
   return Math.random().toString(16).slice(2);
@@ -73,10 +74,9 @@ function DesktopIconView({
         onContextMenu={(e) => onContextMenu(icon.id, e)}
       >
         <div
-          className="flex h-12 w-12 items-center justify-center bg-black/40 border-2 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]"
-          style={{ borderColor: `${icon.color}40` }}
+          className="flex h-12 w-12 items-center justify-center transition-colors hover:brightness-110 active:brightness-90"
         >
-          <PixelIcon name={APP_CONFIG[icon.id].icon} color={icon.color} className="w-7 h-7" />
+          <PixelIcon name={APP_CONFIG[icon.id].icon} color={icon.color} className="w-10 h-10" />
         </div>
         <div className="text-center text-[10px] leading-tight text-neutral-100 font-medium drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] uppercase tracking-tighter">
           {icon.title}
@@ -91,16 +91,18 @@ function DesktopIconView({
   );
 }
 
+const DEFAULT_ICONS: DesktopIcon[] = [
+  { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 60 }, color: APP_CONFIG.about.color },
+  { id: "projects", title: APP_CONFIG.projects.title, position: { x: 20, y: 180 }, color: APP_CONFIG.projects.color },
+  { id: "resume", title: APP_CONFIG.resume.title, position: { x: 20, y: 300 }, color: APP_CONFIG.resume.color },
+  { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 60 }, color: APP_CONFIG.terminal.color },
+  { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 180 }, color: APP_CONFIG.music.color },
+  { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 300 }, color: APP_CONFIG.contact.color },
+  { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 420 }, color: APP_CONFIG.trash.color },
+];
+
 export default function Desktop() {
-  const [icons, setIcons] = useState<DesktopIcon[]>([
-    { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 20 }, color: APP_CONFIG.about.color },
-    { id: "projects", title: APP_CONFIG.projects.title, position: { x: 20, y: 140 }, color: APP_CONFIG.projects.color },
-    { id: "resume", title: APP_CONFIG.resume.title, position: { x: 20, y: 260 }, color: APP_CONFIG.resume.color },
-    { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 20 }, color: APP_CONFIG.terminal.color },
-    { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 140 }, color: APP_CONFIG.music.color },
-    { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 260 }, color: APP_CONFIG.contact.color },
-    { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 380 }, color: APP_CONFIG.trash.color },
-  ]);
+  const [icons, setIcons] = useState<DesktopIcon[]>(DEFAULT_ICONS);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: MenuItem[]; direction?: 'up' | 'down' } | null>(null);
@@ -383,7 +385,17 @@ export default function Desktop() {
     { label: "Change Wallpaper", action: () => console.log("Change Wallpaper") },
     { label: "Clean Up", action: () => console.log("Clean Up"), disabled: true },
     { separator: true },
-    { label: "Refresh", action: () => window.location.reload() },
+    {
+      label: "Reset",
+      action: () => {
+        if (confirm("Are you sure you want to reset the desktop? This will close all windows and reset icon positions.")) {
+          localStorage.removeItem(STORAGE_KEY);
+          // Force overwrite icons with defaults to ensure next load picks them up
+          localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
+          window.location.reload();
+        }
+      }
+    },
   ];
 
   if (!isLoaded) return <div className="min-h-screen bg-neutral-950" />;
@@ -396,6 +408,7 @@ export default function Desktop() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
+      <TopBar />
       {/* wallpaper */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

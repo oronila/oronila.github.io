@@ -11,6 +11,21 @@ export function PixelIcon({
     className?: string;
     size?: string | number;
 }) {
+    // If name starts with /, treat as full path (full color image)
+    if (name.startsWith("/")) {
+        return (
+            <img
+                src={name}
+                className={`${className} [image-rendering:pixelated] select-none pointer-events-none`}
+                style={{ width: size, height: size }}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+            />
+        );
+    }
+
+    // Otherwise treat as legacy mask icon
     const iconUrl = `/icons/pixel/${name}.svg`;
     return (
         <div

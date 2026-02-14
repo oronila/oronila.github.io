@@ -1,12 +1,12 @@
 import type { AppId } from "./types";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
-  about: { title: "About.txt", icon: "user", color: "#38bdf8" },
-  projects: { title: "Projects", icon: "folder", color: "#fbbf24" },
-  resume: { title: "Resume.pdf", icon: "article", color: "#34d399" },
-  terminal: { title: "Terminal", icon: "command", color: "#f87171" },
-  music: { title: "Music", icon: "music", color: "#a78bfa" },
-  contact: { title: "Browser", icon: "link", color: "#22d3ee" },
+  about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
+  projects: { title: "Projects", icon: "/icons/pack/svgs-small/Google Drive.svg", color: "#fbbf24" },
+  resume: { title: "Resume.pdf", icon: "/icons/pack/svgs-small/LinkedIn.svg", color: "#34d399" },
+  terminal: { title: "Terminal", icon: "terminal", color: "#f87171" },
+  music: { title: "Music", icon: "/icons/pack/svgs-small/Spotify.svg", color: "#a78bfa" },
+  contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
   trash: { title: "Trash", icon: "trash", color: "#ef4444" },
 };
 
