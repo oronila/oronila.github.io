@@ -117,6 +117,10 @@ export default function Desktop() {
   const [selectionBox, setSelectionBox] = useState<{ start: { x: number; y: number }; current: { x: number; y: number } } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Ref to access current windows in callbacks (like context menu) without stale closures
+  const windowsRef = useRef(windows);
+  windowsRef.current = windows;
+
   // Load persistence
   useEffect(() => {
     const savedWindows = localStorage.getItem(STORAGE_KEY);
@@ -157,7 +161,8 @@ export default function Desktop() {
   const MAXIMIZED_Z = 10000;
 
   function openApp(appId: AppId) {
-    const existing = windows.find((w) => w.appId === appId);
+    const currentWindows = windowsRef.current;
+    const existing = currentWindows.find((w) => w.appId === appId);
     if (existing) {
       if (existing.isMinimized) {
         restore(existing.instanceId);
@@ -169,10 +174,15 @@ export default function Desktop() {
 
     const instanceId = `${appId}-${makeId()}`;
     const title = getDefaultTitle(appId);
-    const offset = 36 * (windows.length % 6);
+    const offset = 36 * (currentWindows.length % 6);
     const isMobile = window.innerWidth < 768;
     const initialSize = isMobile
       ? { width: window.innerWidth, height: window.innerHeight - 48 } // Full width, height minus topbar/margins
+      : { width: 40 + offset, height: 440 }; // Tighter spawn for desktop (Note: width should be width, height height. Original was 680x440?) Wait, previous code was { x: 40 + offset, y: 40 + offset }. Size was fixed.
+
+    // Correcting size/position logic based on previous state
+    const size = isMobile
+      ? { width: window.innerWidth, height: window.innerHeight - 48 }
       : { width: 680, height: 440 };
 
     const initialPos = isMobile
@@ -187,7 +197,7 @@ export default function Desktop() {
       isMaximized: isMobile,
       zIndex: topZ + 1,
       position: initialPos,
-      size: initialSize,
+      size: size,
     };
     setWindows((prev) => [...prev, next]);
   }
@@ -218,17 +228,19 @@ export default function Desktop() {
   }
 
   function restore(instanceId: string) {
-    const currentTop = windows.reduce((m, w) => Math.max(m, w.zIndex), 10);
+    const currentWindows = windowsRef.current;
+    const currentTop = currentWindows.reduce((m, w) => Math.max(m, w.zIndex), 10);
     updateWindow(instanceId, { isMinimized: false, zIndex: currentTop + 1 });
   }
 
   function maximize(instanceId: string) {
-    const win = windows.find((w) => w.instanceId === instanceId);
+    const currentWindows = windowsRef.current;
+    const win = currentWindows.find((w) => w.instanceId === instanceId);
     if (!win) return;
 
     if (win.isMaximized) {
       // Restore
-      const currentTop = windows.reduce((m, w) => Math.max(m, w.zIndex), 10);
+      const currentTop = currentWindows.reduce((m, w) => Math.max(m, w.zIndex), 10);
       updateWindow(instanceId, {
         isMaximized: false,
         zIndex: currentTop + 1,

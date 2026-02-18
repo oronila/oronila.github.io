@@ -36,7 +36,7 @@ export function ContextMenu({
     return (
         <div
             ref={menuRef}
-            className="fixed z-[20000] min-w-[200px] flex flex-col bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] py-1"
+            className="fixed z-[20000] min-w-[200px] flex flex-col bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] py-1 pointer-events-auto"
             style={{
                 left: position.x,
                 ...(direction === 'up'
