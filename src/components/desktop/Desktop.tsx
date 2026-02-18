@@ -11,7 +11,7 @@ import TopBar from "./TopBar";
 import type { AppId, DesktopIcon, WindowInstance } from "./types";
 
 const STORAGE_KEY = "nooros_windows_v2";
-const ICONS_STORAGE_KEY = "nooros_icons_v2";
+const ICONS_STORAGE_KEY = "nooros_icons_v3";
 
 function makeId() {
   return Math.random().toString(16).slice(2);
@@ -99,13 +99,13 @@ function DesktopIconView({
 }
 
 const DEFAULT_ICONS: DesktopIcon[] = [
-  { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 420 }, color: APP_CONFIG.about.color },
-  { id: "projects", title: APP_CONFIG.projects.title, position: { x: 20, y: 180 }, color: APP_CONFIG.projects.color },
-  { id: "resume", title: APP_CONFIG.resume.title, position: { x: 20, y: 300 }, color: APP_CONFIG.resume.color },
-  { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 60 }, color: APP_CONFIG.terminal.color },
-  { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 180 }, color: APP_CONFIG.music.color },
-  { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 300 }, color: APP_CONFIG.contact.color },
-  { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 60 }, color: APP_CONFIG.trash.color },
+  { id: "about", title: APP_CONFIG.about.title, position: { x: 10, y: 390 }, color: APP_CONFIG.about.color },
+  { id: "projects", title: APP_CONFIG.projects.title, position: { x: 10, y: 150 }, color: APP_CONFIG.projects.color },
+  { id: "resume", title: APP_CONFIG.resume.title, position: { x: 10, y: 270 }, color: APP_CONFIG.resume.color },
+  { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 130, y: 30 }, color: APP_CONFIG.terminal.color },
+  { id: "music", title: APP_CONFIG.music.title, position: { x: 130, y: 150 }, color: APP_CONFIG.music.color },
+  { id: "contact", title: APP_CONFIG.contact.title, position: { x: 130, y: 270 }, color: APP_CONFIG.contact.color },
+  { id: "trash", title: APP_CONFIG.trash.title, position: { x: 10, y: 30 }, color: APP_CONFIG.trash.color },
 ];
 
 export default function Desktop() {
@@ -130,9 +130,9 @@ export default function Desktop() {
 
     if (savedIcons) {
       try {
-        const parsedIcons = JSON.parse(savedIcons);
+        const parsedIcons = JSON.parse(savedIcons) as DesktopIcon[];
         setIcons(prev => prev.map(defaultIcon => {
-          const savedIcon = parsedIcons.find((s: any) => s.id === defaultIcon.id);
+          const savedIcon = parsedIcons.find((s) => s.id === defaultIcon.id);
           return savedIcon ? { ...defaultIcon, position: savedIcon.position } : defaultIcon;
         }));
       } catch (e) { console.error("Failed to load icons", e); }
@@ -156,10 +156,6 @@ export default function Desktop() {
 
   const MAXIMIZED_Z = 10000;
 
-  function moveIcon(id: AppId, position: { x: number; y: number }) {
-    setIcons(prev => prev.map(icon => icon.id === id ? { ...icon, position } : icon));
-  }
-
   function openApp(appId: AppId) {
     const existing = windows.find((w) => w.appId === appId);
     if (existing) {
@@ -181,7 +177,7 @@ export default function Desktop() {
 
     const initialPos = isMobile
       ? { x: 0, y: 24 } // Start below topbar
-      : { x: 80 + offset, y: 80 + offset };
+      : { x: 40 + offset, y: 40 + offset }; // Tighter spawn for desktop
 
     const next: WindowInstance = {
       instanceId,

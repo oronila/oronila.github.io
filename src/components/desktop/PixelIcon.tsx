@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export function PixelIcon({
     name,
@@ -14,13 +15,15 @@ export function PixelIcon({
     // If name starts with /, treat as full path (full color image)
     if (name.startsWith("/")) {
         return (
-            <img
+            <Image
                 src={name}
+                alt=""
+                width={32}
+                height={32}
                 className={`${className} [image-rendering:pixelated] select-none pointer-events-none`}
                 style={{ width: size, height: size }}
-                alt=""
-                aria-hidden="true"
                 draggable={false}
+                unoptimized
             />
         );
     }
