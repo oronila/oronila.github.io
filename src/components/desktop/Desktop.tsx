@@ -69,6 +69,13 @@ function DesktopIconView({
         onClick={(e) => {
           e.stopPropagation();
           if (isDragging.current) return;
+
+          // Mobile single-tap open
+          if (window.innerWidth < 768) {
+            onOpen(icon.id);
+            return;
+          }
+
           onSelect(icon.id, e.metaKey || e.shiftKey);
         }}
         onContextMenu={(e) => onContextMenu(icon.id, e)}
@@ -92,13 +99,13 @@ function DesktopIconView({
 }
 
 const DEFAULT_ICONS: DesktopIcon[] = [
-  { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 60 }, color: APP_CONFIG.about.color },
+  { id: "about", title: APP_CONFIG.about.title, position: { x: 20, y: 420 }, color: APP_CONFIG.about.color },
   { id: "projects", title: APP_CONFIG.projects.title, position: { x: 20, y: 180 }, color: APP_CONFIG.projects.color },
   { id: "resume", title: APP_CONFIG.resume.title, position: { x: 20, y: 300 }, color: APP_CONFIG.resume.color },
   { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 140, y: 60 }, color: APP_CONFIG.terminal.color },
   { id: "music", title: APP_CONFIG.music.title, position: { x: 140, y: 180 }, color: APP_CONFIG.music.color },
   { id: "contact", title: APP_CONFIG.contact.title, position: { x: 140, y: 300 }, color: APP_CONFIG.contact.color },
-  { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 420 }, color: APP_CONFIG.trash.color },
+  { id: "trash", title: APP_CONFIG.trash.title, position: { x: 20, y: 60 }, color: APP_CONFIG.trash.color },
 ];
 
 export default function Desktop() {
@@ -167,14 +174,24 @@ export default function Desktop() {
     const instanceId = `${appId}-${makeId()}`;
     const title = getDefaultTitle(appId);
     const offset = 36 * (windows.length % 6);
+    const isMobile = window.innerWidth < 768;
+    const initialSize = isMobile
+      ? { width: window.innerWidth, height: window.innerHeight - 48 } // Full width, height minus topbar/margins
+      : { width: 680, height: 440 };
+
+    const initialPos = isMobile
+      ? { x: 0, y: 24 } // Start below topbar
+      : { x: 80 + offset, y: 80 + offset };
+
     const next: WindowInstance = {
       instanceId,
       appId,
       title,
       isMinimized: false,
+      isMaximized: isMobile,
       zIndex: topZ + 1,
-      position: { x: 80 + offset, y: 80 + offset },
-      size: { width: 680, height: 440 },
+      position: initialPos,
+      size: initialSize,
     };
     setWindows((prev) => [...prev, next]);
   }
@@ -445,7 +462,7 @@ export default function Desktop() {
               onClose={close}
               onMinimize={minimize}
               onMaximize={maximize}
-              onResize={(size) => updateWindow(w.instanceId, { size, isMaximized: false })}
+              onResize={(updates) => updateWindow(w.instanceId, { ...updates, isMaximized: false })}
               onDrag={(position) => updateWindow(w.instanceId, { position, isMaximized: false })}
             >
               <AppContent appId={w.appId} />

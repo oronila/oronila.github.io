@@ -131,7 +131,7 @@ export default function TopBar() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
+                    <div className="hidden md:flex items-center gap-2">
                         <span>{weather ? weather.icon : "Loading..."}</span>
                         <span>{weather ? `${weather.temp}°F Austin` : ""}</span>
                     </div>

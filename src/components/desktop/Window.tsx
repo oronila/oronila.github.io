@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "re-resizable";
 import type { WindowInstance } from "./types";
@@ -20,11 +20,27 @@ export default function Window({
   onClose: (instanceId: string) => void;
   onMinimize: (instanceId: string) => void;
   onMaximize: (instanceId: string) => void;
-  onResize: (size: { width: number; height: number }) => void;
+  onResize: (updates: { size: { width: number; height: number }; position?: { x: number; y: number } }) => void;
   onDrag: (position: { x: number; y: number }) => void;
   children: React.ReactNode;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
+
+  const resizeStart = useRef<{
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  }>({ width: 0, height: 0, x: 0, y: 0 });
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   if (win.isMinimized) return null;
 
@@ -36,13 +52,22 @@ export default function Window({
       position={win.position}
       onStart={() => onFocus(win.instanceId)}
       onDrag={(_, data) => {
-        onDrag({ x: data.x, y: data.y });
+        // Clamp drag position
+        let newX = data.x;
+        let newY = data.y;
+
+        if (newX < 0) newX = 0;
+        if (newY < 24) newY = 24; // Check TopBar
+        if (newX + win.size.width > window.innerWidth) newX = window.innerWidth - win.size.width;
+        if (newY + win.size.height > window.innerHeight) newY = window.innerHeight - win.size.height;
+
+        onDrag({ x: newX, y: newY });
       }}
     >
       <div
         ref={nodeRef}
         onMouseDownCapture={() => onFocus(win.instanceId)}
-        className={`fixed border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden ${win.appId === "terminal" ? "bg-black" : "bg-neutral-900"}`}
+        className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
         style={{
           zIndex: win.zIndex
         }}
@@ -55,10 +80,47 @@ export default function Window({
           minHeight={200}
           maxWidth={win.isMaximized ? undefined : 1200}
           maxHeight={win.isMaximized ? undefined : 800}
-          onResizeStop={(_, __, ___, d) => {
+          bounds="window"
+          onResizeStart={() => {
+            resizeStart.current = {
+              width: win.size.width,
+              height: win.size.height,
+              x: win.position.x,
+              y: win.position.y
+            };
+          }}
+          onResize={(e, direction, ref, d) => {
+            let newWidth = resizeStart.current.width + d.width;
+            let newHeight = resizeStart.current.height + d.height;
+            let newX = resizeStart.current.x;
+            let newY = resizeStart.current.y;
+
+            if (direction.includes("left")) {
+              newX -= d.width;
+            }
+            if (direction.includes("top")) {
+              newY -= d.height;
+            }
+
+            // Manual clamping to screen bounds
+            if (newX < 0) {
+              newWidth += newX;
+              newX = 0;
+            }
+            if (newY < 24) { // Respect TopBar
+              newHeight += (newY - 24);
+              newY = 24;
+            }
+            if (newX + newWidth > window.innerWidth) {
+              newWidth = window.innerWidth - newX;
+            }
+            if (newY + newHeight > window.innerHeight) {
+              newHeight = window.innerHeight - newY;
+            }
+
             onResize({
-              width: win.size.width + d.width,
-              height: win.size.height + d.height,
+              size: { width: Math.max(300, newWidth), height: Math.max(200, newHeight) },
+              position: { x: newX, y: newY }
             });
           }}
           enable={win.isMaximized ? {
@@ -101,18 +163,20 @@ export default function Window({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onMinimize(win.instanceId);
+                    if (!isMobile) onMinimize(win.instanceId);
                   }}
-                  className="h-4 w-4 bg-[#ffbd2e] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
+                  className={`h-4 w-4 border-2 border-black transition-all ${isMobile ? "bg-neutral-600 cursor-default" : "bg-[#ffbd2e] hover:brightness-110 active:brightness-90"}`}
                   aria-label="Minimize"
+                  disabled={isMobile}
                 />
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onMaximize(win.instanceId);
+                    if (!isMobile) onMaximize(win.instanceId);
                   }}
-                  className="h-4 w-4 bg-[#28c840] border-2 border-black hover:brightness-110 active:brightness-90 transition-all"
+                  className={`h-4 w-4 border-2 border-black transition-all ${isMobile ? "bg-neutral-600 cursor-default" : "bg-[#28c840] hover:brightness-110 active:brightness-90"}`}
                   aria-label="Maximize"
+                  disabled={isMobile}
                 />
               </div>
               <span className="text-[10px] font-medium text-neutral-100 uppercase tracking-tighter">

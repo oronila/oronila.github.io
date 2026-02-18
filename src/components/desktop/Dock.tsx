@@ -65,7 +65,7 @@ export default function Dock({
   ];
 
   return (
-    <div className="pointer-events-none fixed bottom-6 left-1/2 z-[9999] -translate-x-1/2">
+    <div className="hidden md:flex pointer-events-none fixed bottom-6 left-1/2 z-[9999] -translate-x-1/2">
       <div className="pointer-events-auto flex items-end gap-2 border-4 border-black bg-neutral-900/60 p-2 shadow-2xl">
         {dockAppIds.map((id) => {
           const app = APP_CONFIG[id];
