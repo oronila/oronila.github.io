@@ -50,9 +50,18 @@ export function AppContent({ appId }: { appId: AppId }) {
   switch (appId) {
     case "about":
       return (
-        <AppFrame title="About">
-          <p>Coming next: load from markdown in <code>/content</code>.</p>
-        </AppFrame>
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`Noor Ali
+
+probably building something new.
+
+projects at github.
+
+i used to work on fynopsis.ai and trynebula.ai.
+
+always happy to chat — reach me by email.`}
+        />
       );
     case "projects":
       return (
