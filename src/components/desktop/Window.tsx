@@ -42,7 +42,7 @@ export default function Window({
       <div
         ref={nodeRef}
         onMouseDownCapture={() => onFocus(win.instanceId)}
-        className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
+        className={`fixed border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden ${win.appId === "terminal" ? "bg-black" : "bg-neutral-900"}`}
         style={{
           zIndex: win.zIndex
         }}
@@ -125,7 +125,7 @@ export default function Window({
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-hidden relative bg-neutral-900">
+          <div className={`flex-1 overflow-hidden relative ${win.appId === "terminal" ? "bg-black" : "bg-neutral-900"}`}>
             {children}
           </div>
         </Resizable>

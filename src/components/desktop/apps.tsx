@@ -1,4 +1,5 @@
 import type { AppId } from "./types";
+import TerminalApp from "./TerminalApp";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
   about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
@@ -79,12 +80,10 @@ always happy to chat — reach me by email.`}
           />
         </div>
       );
+
+
     case "terminal":
-      return (
-        <AppFrame title="Terminal">
-          <p>Terminal app coming next.</p>
-        </AppFrame>
-      );
+      return <TerminalApp />;
     case "music":
       return (
         <AppFrame title="Music">
