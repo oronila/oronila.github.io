@@ -176,9 +176,6 @@ export default function Desktop() {
     const title = getDefaultTitle(appId);
     const offset = 36 * (currentWindows.length % 6);
     const isMobile = window.innerWidth < 768;
-    const initialSize = isMobile
-      ? { width: window.innerWidth, height: window.innerHeight - 48 } // Full width, height minus topbar/margins
-      : { width: 40 + offset, height: 440 }; // Tighter spawn for desktop (Note: width should be width, height height. Original was 680x440?) Wait, previous code was { x: 40 + offset, y: 40 + offset }. Size was fixed.
 
     // Correcting size/position logic based on previous state
     const size = isMobile
