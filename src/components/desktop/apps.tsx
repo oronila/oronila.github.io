@@ -12,9 +12,9 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
   trash: { title: "Trash", icon: "/icons/pixel/trash.svg", color: "#000000" },
   games: { title: "Games", icon: "/icons/pack/svgs-small/Steam.svg", color: "#171a21" },
-  youtube: { title: "Oronila Youtube", icon: "/icons/pack/svgs-small/YouTube.svg", color: "#ff0000" },
+  youtube: { title: "Oronila Youtube", icon: "/icons/pack/svgs-small/Youtube.svg", color: "#ff0000" },
   system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
-  image_viewer: { title: "Image Viewer", icon: "/icons/pixel/image.svg", color: "#a78bfa" },
+  image_viewer: { title: "Image Viewer", icon: "/icons/pixel/file.svg", color: "#a78bfa" },
 };
 
 function AppFrame({
