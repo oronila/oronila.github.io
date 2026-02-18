@@ -32,6 +32,7 @@ export default function Window({
     <Draggable
       nodeRef={nodeRef}
       handle="[data-window-handle]"
+      disabled={win.isMaximized}
       position={win.position}
       onStart={() => onFocus(win.instanceId)}
       onDrag={(_, data) => {
@@ -40,6 +41,7 @@ export default function Window({
     >
       <div
         ref={nodeRef}
+        onMouseDownCapture={() => onFocus(win.instanceId)}
         className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
         style={{
           zIndex: win.zIndex
@@ -59,7 +61,10 @@ export default function Window({
               height: win.size.height + d.height,
             });
           }}
-          enable={{
+          enable={win.isMaximized ? {
+            top: false, right: false, bottom: false, left: false,
+            topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
+          } : {
             top: true,
             right: true,
             bottom: true,

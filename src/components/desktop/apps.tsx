@@ -4,10 +4,10 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
   projects: { title: "Projects", icon: "/icons/pack/svgs-small/Google Drive.svg", color: "#fbbf24" },
   resume: { title: "Resume.pdf", icon: "/icons/pack/svgs-small/LinkedIn.svg", color: "#34d399" },
-  terminal: { title: "Terminal", icon: "terminal", color: "#f87171" },
+  terminal: { title: "Terminal", icon: "terminal", color: "#000000" },
   music: { title: "Music", icon: "/icons/pack/svgs-small/Spotify.svg", color: "#a78bfa" },
   contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
-  trash: { title: "Trash", icon: "trash", color: "#ef4444" },
+  trash: { title: "Trash", icon: "trash", color: "#000000" },
 };
 
 function AppFrame({

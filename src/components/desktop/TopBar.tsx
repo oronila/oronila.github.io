@@ -24,7 +24,7 @@ export default function TopBar() {
     }, []);
 
     return (
-        <div className="fixed top-0 left-0 right-0 h-6 bg-black/20 backdrop-blur-md flex items-center justify-between px-4 z-50 text-white text-xs font-medium select-none shadow-sm">
+        <div className="fixed top-0 left-0 right-0 h-6 bg-black/20 backdrop-blur-md flex items-center justify-between px-4 z-[1000] text-white text-xs font-medium select-none shadow-sm">
             <div className="flex items-center gap-6">
                 <div className="font-bold tracking-wide">NoorOS</div>
             </div>

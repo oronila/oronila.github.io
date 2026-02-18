@@ -147,6 +147,8 @@ export default function Desktop() {
     [windows],
   );
 
+  const MAXIMIZED_Z = 10000;
+
   function moveIcon(id: AppId, position: { x: number; y: number }) {
     setIcons(prev => prev.map(icon => icon.id === id ? { ...icon, position } : icon));
   }
@@ -187,7 +189,9 @@ export default function Desktop() {
     setWindows((prev) => {
       const currentTop = prev.reduce((m, w) => Math.max(m, w.zIndex), 10);
       return prev.map((w) =>
-        w.instanceId === instanceId ? { ...w, zIndex: currentTop + 1 } : w,
+        w.instanceId === instanceId
+          ? { ...w, zIndex: w.isMaximized ? MAXIMIZED_Z : currentTop + 1 }
+          : w,
       );
     });
   }
@@ -211,8 +215,10 @@ export default function Desktop() {
 
     if (win.isMaximized) {
       // Restore
+      const currentTop = windows.reduce((m, w) => Math.max(m, w.zIndex), 10);
       updateWindow(instanceId, {
         isMaximized: false,
+        zIndex: currentTop + 1,
         ...(win.restoreState ? {
           position: win.restoreState.position,
           size: win.restoreState.size,
@@ -221,22 +227,17 @@ export default function Desktop() {
       });
     } else {
       // Maximize
-      const dockHeight = 96; // Approximate dock height + margins
-
-      const maxWidth = window.innerWidth;
-      const maxHeight = window.innerHeight - dockHeight;
-
       updateWindow(instanceId, {
         isMaximized: true,
+        zIndex: MAXIMIZED_Z,
         restoreState: {
           position: win.position,
           size: win.size,
         },
         position: { x: 0, y: 0 },
-        size: { width: maxWidth, height: maxHeight },
+        size: { width: window.innerWidth, height: window.innerHeight },
       });
     }
-    focus(instanceId);
   }
 
   function handleIconDrag(id: AppId, delta: { x: number; y: number }) {
@@ -435,7 +436,7 @@ export default function Desktop() {
       </div>
 
       {/* windows */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none">
         {windows.map((w) => (
           <div key={w.instanceId} className="pointer-events-auto">
             <Window

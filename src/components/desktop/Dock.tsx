@@ -61,6 +61,7 @@ export default function Dock({
     "terminal",
     "music",
     "contact",
+    "trash",
   ];
 
   return (
