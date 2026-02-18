@@ -53,8 +53,8 @@ export default function Window({
           size={{ width: win.size.width, height: win.size.height }}
           minWidth={300}
           minHeight={200}
-          maxWidth={1200}
-          maxHeight={800}
+          maxWidth={win.isMaximized ? undefined : 1200}
+          maxHeight={win.isMaximized ? undefined : 800}
           onResizeStop={(_, __, ___, d) => {
             onResize({
               width: win.size.width + d.width,
