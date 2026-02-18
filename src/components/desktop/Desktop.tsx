@@ -467,18 +467,7 @@ export default function Desktop() {
         ))}
       </div>
 
-      {/* Selection Box */}
-      {selectionBox && (
-        <div
-          className="absolute border border-white/40 bg-white/10 z-20 pointer-events-none"
-          style={{
-            left: Math.min(selectionBox.start.x, selectionBox.current.x),
-            top: Math.min(selectionBox.start.y, selectionBox.current.y),
-            width: Math.abs(selectionBox.current.x - selectionBox.start.x),
-            height: Math.abs(selectionBox.current.y - selectionBox.start.y),
-          }}
-        />
-      )}
+
 
       {/* Windows */}
       <div className="absolute inset-0 pointer-events-none">

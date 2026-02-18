@@ -58,6 +58,8 @@ export default function FileExplorer({
         setSelectedIds([]);
     };
 
+    const containerRectRef = useRef<DOMRect | null>(null);
+
     const handleMouseDown = (e: React.MouseEvent) => {
         if (e.target !== containerRef.current && e.target === e.currentTarget) {
             // Clicked on background
@@ -66,6 +68,7 @@ export default function FileExplorer({
             }
             const rect = containerRef.current?.getBoundingClientRect();
             if (rect) {
+                containerRectRef.current = rect;
                 setSelectionBox({
                     start: { x: e.clientX - rect.left, y: e.clientY - rect.top },
                     current: { x: e.clientX - rect.left, y: e.clientY - rect.top },
@@ -76,8 +79,8 @@ export default function FileExplorer({
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (selectionBox && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
+        if (selectionBox && containerRef.current && containerRectRef.current) {
+            const rect = containerRectRef.current;
             setSelectionBox(prev => prev ? {
                 ...prev,
                 current: { x: e.clientX - rect.left, y: e.clientY - rect.top },
@@ -88,6 +91,7 @@ export default function FileExplorer({
     const handleMouseUp = () => {
         if (selectionBox && containerRef.current) {
             // Calculate selection
+            // We can check rect again here for safety, or use the ref
             const rect = containerRef.current.getBoundingClientRect();
             const left = Math.min(selectionBox.start.x, selectionBox.current.x);
             const top = Math.min(selectionBox.start.y, selectionBox.current.y);
@@ -119,6 +123,7 @@ export default function FileExplorer({
             setSelectedIds(newSelectedIds);
         }
         setSelectionBox(null);
+        containerRectRef.current = null;
     };
 
     const handleContextMenu = (e: React.MouseEvent, type: "item" | "background", itemId?: string) => {
