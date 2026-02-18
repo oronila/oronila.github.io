@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import type { AppId } from "./types";
 
-export default function TopBar() {
+export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAsleep, setIsAsleep] = useState(false);
     const [time, setTime] = useState<string>("");
@@ -95,7 +96,17 @@ export default function TopBar() {
                     </button>
 
                     {menuOpen && (
-                        <div className="absolute top-6 left-0 w-48 bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] py-1 flex flex-col z-[20001]">
+                        <div data-system-menu className="absolute top-6 left-0 w-48 bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)] py-1 flex flex-col z-[20001]">
+                            <button
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                    onOpenApp("system");
+                                }}
+                                className="text-left px-4 py-1.5 hover:bg-[#3b82f6] hover:text-white text-neutral-100 uppercase text-xs"
+                            >
+                                About NoorOS
+                            </button>
+                            <div className="my-1 h-[2px] bg-neutral-700" />
                             <button
                                 onClick={() => {
                                     setMenuOpen(false);

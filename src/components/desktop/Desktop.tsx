@@ -414,12 +414,10 @@ export default function Desktop() {
     {
       label: "Reset",
       action: () => {
-        if (confirm("Are you sure you want to reset the desktop? This will close all windows and reset icon positions.")) {
-          localStorage.removeItem(STORAGE_KEY);
-          // Force overwrite icons with defaults to ensure next load picks them up
-          localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
-          window.location.reload();
-        }
+        localStorage.removeItem(STORAGE_KEY);
+        // Force overwrite icons with defaults to ensure next load picks them up
+        localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
+        window.location.reload();
       }
     },
   ];
@@ -434,7 +432,7 @@ export default function Desktop() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <TopBar />
+      <TopBar onOpenApp={openApp} />
       {/* wallpaper */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

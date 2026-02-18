@@ -9,6 +9,7 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   music: { title: "Music", icon: "/icons/pack/svgs-small/Spotify.svg", color: "#a78bfa" },
   contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
   trash: { title: "Trash", icon: "trash", color: "#000000" },
+  system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
 };
 
 function AppFrame({
@@ -22,6 +23,26 @@ function AppFrame({
     <div className="h-full w-full p-4">
       <div className="text-sm text-neutral-400">{title}</div>
       <div className="mt-3 text-sm leading-relaxed text-neutral-100">{children}</div>
+    </div>
+  );
+}
+
+function SystemInfo() {
+  return (
+    <div className="flex flex-col items-center justify-center h-full w-full bg-[#1e1e1e] text-neutral-200 font-pixel p-8 select-none">
+      <div className="text-xl mb-4 text-center leading-relaxed">MacBook Pro</div>
+      <div className="text-[10px] text-neutral-500 mb-8">16-inch, Nov 2024</div>
+
+      <div className="grid grid-cols-[1fr_2fr] gap-x-4 gap-y-2 text-[10px] w-full max-w-[300px]">
+        <div className="text-right text-neutral-400">Chip</div>
+        <div>Apple M4 Pro</div>
+
+        <div className="text-right text-neutral-400">Memory</div>
+        <div>48 GB</div>
+
+        <div className="text-right text-neutral-400">macOS</div>
+        <div>Tahoe 26.4</div>
+      </div>
     </div>
   );
 }
@@ -42,6 +63,8 @@ export function getDefaultTitle(appId: AppId) {
       return "Contact (Browser)";
     case "trash":
       return "Trash";
+    case "system":
+      return "About Noor's Mac";
     default:
       return "App";
   }
@@ -104,6 +127,8 @@ always happy to chat — reach me by email.`}
           <p>Trash is empty.</p>
         </AppFrame>
       );
+    case "system":
+      return <SystemInfo />;
   }
 }
 
