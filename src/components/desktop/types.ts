@@ -7,7 +7,9 @@ export type AppId =
   | "contact"
   | "trash"
   | "system"
-  | "games";
+  | "games"
+  | "youtube"
+  | "image_viewer";
 
 export type DesktopIcon = {
   id: AppId;

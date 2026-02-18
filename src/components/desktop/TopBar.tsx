@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { AppId } from "./types";
+import Screensaver from "./Screensaver";
 
 export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -77,12 +78,7 @@ export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }
 
     return (
         <>
-            {isAsleep && (
-                <div
-                    className="fixed inset-0 z-[99999] bg-black cursor-none"
-                    onClick={() => setIsAsleep(false)}
-                />
-            )}
+            {isAsleep && <Screensaver onWake={() => setIsAsleep(false)} />}
 
             <div className="fixed top-0 left-0 right-0 h-6 bg-black/20 backdrop-blur-md flex items-center justify-between px-4 z-[1000] text-white text-xs font-medium select-none shadow-sm">
                 <div className="flex items-center gap-6 relative">
@@ -119,23 +115,21 @@ export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }
                             <div className="my-1 h-[2px] bg-neutral-700" />
                             <button
                                 onClick={() => {
+                                    window.location.reload();
+                                    setMenuOpen(false);
+                                }}
+                                className="text-left px-4 py-1.5 hover:bg-[#3b82f6] hover:text-white text-neutral-100 uppercase text-xs"
+                            >
+                                Restart
+                            </button>
+                            <button
+                                onClick={() => {
                                     setMenuOpen(false);
                                     setIsAsleep(true);
                                 }}
                                 className="text-left px-4 py-1.5 hover:bg-[#3b82f6] hover:text-white text-neutral-100 uppercase text-xs"
                             >
-                                Sleep
-                            </button>
-                            <button
-                                onClick={() => {
-                                    if (confirm("Are you sure you want to shut down?")) {
-                                        window.location.reload();
-                                    }
-                                    setMenuOpen(false);
-                                }}
-                                className="text-left px-4 py-1.5 hover:bg-[#3b82f6] hover:text-white text-neutral-100 uppercase text-xs"
-                            >
-                                Shut Down...
+                                Shut Down
                             </button>
                         </div>
                     )}

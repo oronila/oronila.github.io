@@ -1,5 +1,7 @@
 import type { AppId } from "./types";
 import TerminalApp from "./TerminalApp";
+import FileExplorer from "./FileExplorer";
+import { TRASH_DATA, PROJECTS_DATA } from "./fileSystem";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
   about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
@@ -10,7 +12,9 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
   trash: { title: "Trash", icon: "/icons/pixel/trash.svg", color: "#000000" },
   games: { title: "Games", icon: "/icons/pack/svgs-small/Steam.svg", color: "#171a21" },
+  youtube: { title: "Oronila Youtube", icon: "/icons/pack/svgs-small/YouTube.svg", color: "#ff0000" },
   system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
+  image_viewer: { title: "Image Viewer", icon: "/icons/pixel/image.svg", color: "#a78bfa" },
 };
 
 function AppFrame({
@@ -66,14 +70,26 @@ export function getDefaultTitle(appId: AppId) {
       return "Trash";
     case "games":
       return "Games";
+    case "youtube":
+      return "Oronila Youtube";
     case "system":
       return "About Noor's Mac";
+    case "image_viewer":
+      return "Image Viewer";
     default:
       return "App";
   }
 }
 
-export function AppContent({ appId }: { appId: AppId }) {
+export function AppContent({
+  appId,
+  onError,
+  onOpenApp,
+}: {
+  appId: AppId;
+  onError?: (message: string) => void;
+  onOpenApp?: (id: AppId) => void;
+}) {
   switch (appId) {
     case "about":
       return (
@@ -91,11 +107,7 @@ always happy to chat — reach me by email.`}
         />
       );
     case "projects":
-      return (
-        <AppFrame title="Projects">
-          <p>Folder view coming next.</p>
-        </AppFrame>
-      );
+      return <FileExplorer initialData={PROJECTS_DATA} onError={onError} onOpenApp={onOpenApp} />;
     case "resume":
       return (
         <div className="h-full w-full">
@@ -125,19 +137,36 @@ always happy to chat — reach me by email.`}
         </AppFrame>
       );
     case "trash":
-      return (
-        <AppFrame title="Trash">
-          <p>Trash is empty.</p>
-        </AppFrame>
-      );
+      return <FileExplorer initialData={TRASH_DATA} onError={onError} onOpenApp={onOpenApp} />;
     case "games":
       return (
         <AppFrame title="Games">
           <p>Steam library integration coming next.</p>
         </AppFrame>
       );
+    case "youtube":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/fmHb7YHrnaM?autoplay=1"
+            title="Oronila Highlights"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        </div>
+      );
     case "system":
       return <SystemInfo />;
+    case "image_viewer":
+      return (
+        <div className="flex items-center justify-center h-full w-full bg-[#1e1e1e]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/rank.png" alt="Rank" className="max-w-full max-h-full object-contain" />
+        </div>
+      );
   }
 }
 

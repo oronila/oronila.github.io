@@ -109,8 +109,11 @@ const DEFAULT_ICONS: DesktopIcon[] = [
   { id: "trash", title: APP_CONFIG.trash.title, position: { x: 10, y: 30 }, color: APP_CONFIG.trash.color },
 ];
 
+import ErrorPopup from "./ErrorPopup";
+
 export default function Desktop() {
   const [icons, setIcons] = useState<DesktopIcon[]>(DEFAULT_ICONS);
+  const [errorPopup, setErrorPopup] = useState<string | null>(null);
 
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: MenuItem[]; direction?: 'up' | 'down' } | null>(null);
@@ -441,7 +444,15 @@ export default function Desktop() {
       />
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      {/* desktop icons */}
+      {/* Error Popup */}
+      {errorPopup && (
+        <ErrorPopup
+          message={errorPopup}
+          onClose={() => setErrorPopup(null)}
+        />
+      )}
+
+      {/* Desktop Icons */}
       <div className="absolute inset-0 z-10 p-6 overflow-hidden pointer-events-none">
         {icons.map((icon) => (
           <DesktopIconView
@@ -456,20 +467,39 @@ export default function Desktop() {
         ))}
       </div>
 
-      {/* windows */}
+      {/* Selection Box */}
+      {selectionBox && (
+        <div
+          className="absolute border border-white/40 bg-white/10 z-20 pointer-events-none"
+          style={{
+            left: Math.min(selectionBox.start.x, selectionBox.current.x),
+            top: Math.min(selectionBox.start.y, selectionBox.current.y),
+            width: Math.abs(selectionBox.current.x - selectionBox.start.x),
+            height: Math.abs(selectionBox.current.y - selectionBox.start.y),
+          }}
+        />
+      )}
+
+      {/* Windows */}
       <div className="absolute inset-0 pointer-events-none">
-        {windows.map((w) => (
-          <div key={w.instanceId} className="pointer-events-auto">
+        {windows.map((win) => (
+          <div key={win.instanceId} className="pointer-events-auto">
             <Window
-              win={w}
+              win={win}
               onFocus={focus}
               onClose={close}
               onMinimize={minimize}
               onMaximize={maximize}
-              onResize={(updates) => updateWindow(w.instanceId, { ...updates, isMaximized: false })}
-              onDrag={(position) => updateWindow(w.instanceId, { position, isMaximized: false })}
+              onResize={(updates) => updateWindow(win.instanceId, { ...updates, isMaximized: false })}
+              onDrag={(position) => updateWindow(win.instanceId, { position, isMaximized: false })}
             >
-              <AppContent appId={w.appId} />
+              <div className="h-full w-full overflow-auto" onMouseDown={(e) => e.stopPropagation()}>
+                <AppContent
+                  appId={win.appId}
+                  onError={(msg) => setErrorPopup(msg)}
+                  onOpenApp={openApp}
+                />
+              </div>
             </Window>
           </div>
         ))}
