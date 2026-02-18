@@ -57,7 +57,7 @@ export default function TerminalApp() {
                     type: "output",
                     content: `About.txt
 Projects/
-Resume.pdf
+Resume
 Music/
 Contact.lnk`,
                 });
@@ -83,7 +83,7 @@ Contact.lnk`,
 probably building something new.
 projects at github.`,
                         });
-                    } else if (filename === "Resume.pdf") {
+                    } else if (filename === "Resume") {
                         newHistory.push({ type: "output", content: "[Binary file]" });
                     } else {
                         newHistory.push({ type: "output", content: `cat: ${filename}: No such file or directory` });

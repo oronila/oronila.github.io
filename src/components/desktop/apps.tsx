@@ -3,12 +3,13 @@ import TerminalApp from "./TerminalApp";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
   about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
-  projects: { title: "Projects", icon: "/icons/pack/svgs-small/Google Drive.svg", color: "#fbbf24" },
-  resume: { title: "Resume.pdf", icon: "/icons/pack/svgs-small/LinkedIn.svg", color: "#34d399" },
-  terminal: { title: "Terminal", icon: "terminal", color: "#000000" },
+  projects: { title: "Projects", icon: "/icons/pack/folder.svg", color: "#fbbf24" },
+  resume: { title: "Resume", icon: "/icons/pack/svgs-small/LinkedIn.svg", color: "#34d399" },
+  terminal: { title: "Terminal", icon: "/icons/pixel/terminal.svg", color: "#000000" },
   music: { title: "Music", icon: "/icons/pack/svgs-small/Spotify.svg", color: "#a78bfa" },
   contact: { title: "Browser", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#22d3ee" },
-  trash: { title: "Trash", icon: "trash", color: "#000000" },
+  trash: { title: "Trash", icon: "/icons/pixel/trash.svg", color: "#000000" },
+  games: { title: "Games", icon: "/icons/pack/svgs-small/Steam.svg", color: "#171a21" },
   system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
 };
 
@@ -54,7 +55,7 @@ export function getDefaultTitle(appId: AppId) {
     case "projects":
       return "Projects";
     case "resume":
-      return "Resume.pdf";
+      return "Resume";
     case "terminal":
       return "Terminal";
     case "music":
@@ -63,6 +64,8 @@ export function getDefaultTitle(appId: AppId) {
       return "Contact (Browser)";
     case "trash":
       return "Trash";
+    case "games":
+      return "Games";
     case "system":
       return "About Noor's Mac";
     default:
@@ -125,6 +128,12 @@ always happy to chat — reach me by email.`}
       return (
         <AppFrame title="Trash">
           <p>Trash is empty.</p>
+        </AppFrame>
+      );
+    case "games":
+      return (
+        <AppFrame title="Games">
+          <p>Steam library integration coming next.</p>
         </AppFrame>
       );
     case "system":

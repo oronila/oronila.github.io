@@ -60,6 +60,7 @@ export default function Dock({
     "resume",
     "terminal",
     "music",
+    "games",
     "contact",
     "trash",
   ];

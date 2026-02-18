@@ -6,7 +6,8 @@ export type AppId =
   | "music"
   | "contact"
   | "trash"
-  | "system";
+  | "system"
+  | "games";
 
 export type DesktopIcon = {
   id: AppId;

@@ -105,6 +105,7 @@ const DEFAULT_ICONS: DesktopIcon[] = [
   { id: "terminal", title: APP_CONFIG.terminal.title, position: { x: 130, y: 30 }, color: APP_CONFIG.terminal.color },
   { id: "music", title: APP_CONFIG.music.title, position: { x: 130, y: 150 }, color: APP_CONFIG.music.color },
   { id: "contact", title: APP_CONFIG.contact.title, position: { x: 130, y: 270 }, color: APP_CONFIG.contact.color },
+  { id: "games", title: APP_CONFIG.games.title, position: { x: 130, y: 390 }, color: APP_CONFIG.games.color },
   { id: "trash", title: APP_CONFIG.trash.title, position: { x: 10, y: 30 }, color: APP_CONFIG.trash.color },
 ];
 
