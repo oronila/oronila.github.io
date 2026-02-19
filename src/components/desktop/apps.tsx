@@ -112,7 +112,7 @@ projects at github.
 
 i used to work on fynopsis.ai and trynebula.ai.
 
-always happy to chat — reach me by email.`}
+always happy to chat — reach me by email (noormehdiali@gmail.com).`}
         />
       );
     case "projects":
