@@ -1,9 +1,9 @@
-import React from "react";
+import type { DetailedHTMLProps, HTMLAttributes } from "react";
 
-declare global {
+declare module "react" {
     namespace JSX {
         interface IntrinsicElements {
-            marquee: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+            marquee: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
                 behavior?: string;
                 direction?: string;
                 scrollamount?: number | string;
