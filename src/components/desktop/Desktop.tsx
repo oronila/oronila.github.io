@@ -127,6 +127,7 @@ const DEFAULT_ICONS: DesktopIcon[] = [
 ];
 
 import ErrorPopup from "./ErrorPopup";
+import BootSequence from "./BootSequence";
 
 export default function Desktop() {
   const WALLPAPERS = [
@@ -134,6 +135,7 @@ export default function Desktop() {
     "/pixel-background.gif",
   ];
   const [wallpaperIndex, setWallpaperIndex] = useState(0);
+  const [isBooting, setIsBooting] = useState(false);
 
   const [icons, setIcons] = useState<DesktopIcon[]>(DEFAULT_ICONS);
   const [errorPopup, setErrorPopup] = useState<string | null>(null);
@@ -178,6 +180,18 @@ export default function Desktop() {
     }
 
     setIsLoaded(true);
+
+    // Check for specific boot flag
+    const shouldBoot = localStorage.getItem("nooros_run_boot_sequence");
+    if (shouldBoot === "true") {
+      setIsBooting(true);
+      localStorage.removeItem("nooros_run_boot_sequence");
+
+      const bootTimer = setTimeout(() => {
+        setIsBooting(false);
+      }, 2000);
+      return () => clearTimeout(bootTimer);
+    }
   }, []);
 
   // Save persistence
@@ -448,6 +462,27 @@ export default function Desktop() {
     window.location.reload();
   }
 
+  function handleRestart() {
+    handleReset();
+    // We need to set the flag AFTER clearing everything (handleReset wipes stuff), 
+    // but before reload happens.
+    // Actually handleReset calls reload() at the end, so we can't run code after it efficiently 
+    // unless we modify handleReset or copy logic.
+    // Let's just modify handleReset to NOT reload immediately, or just copy the logic here.
+    // Better yet, let's just write the flag after handleReset's clear logic but we need to intercept the reload.
+    // I'll rewrite handleRestart to duplicate the clear logic to be safe and explicit.
+
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("nooros_browser_state");
+    localStorage.removeItem("nooros_wallpaper_index");
+    localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
+
+    // Set boot flag
+    localStorage.setItem("nooros_run_boot_sequence", "true");
+
+    window.location.reload();
+  }
+
   const BACKGROUND_MENU_ITEMS: MenuItem[] = [
     { label: "Get Info", action: () => console.log("Get Info") },
     { separator: true },
@@ -473,7 +508,8 @@ export default function Desktop() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <TopBar onOpenApp={openApp} onRestart={handleReset} />
+      {isBooting && <BootSequence />}
+      <TopBar onOpenApp={openApp} onRestart={handleRestart} />
 
       {/* Wallpapers with Cross-fade */}
       {WALLPAPERS.map((src, index) => {
