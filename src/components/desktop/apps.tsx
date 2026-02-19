@@ -21,6 +21,15 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   game_flappy: { title: "Flappy Bird", icon: "/icons/pack/svgs-small/Steam.svg", color: "#fbbf24" },
   game_run3: { title: "Run 3", icon: "/icons/pack/svgs-small/Steam.svg", color: "#3b82f6" },
   explorer: { title: "File Explorer", icon: "/icons/pack/file-explorer.svg", color: "#3b82f6" },
+  fynopsis: { title: "Fynopsis", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#6366f1" },
+  genesis: { title: "Genesis", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#10b981" },
+  personal_website_iframe: { title: "oronila.github.io", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#f59e0b" },
+  nebula: { title: "Nebula", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#8b5cf6" },
+  about_fynopsis: { title: "About Fynopsis", icon: "/icons/pixel/file.svg", color: "#6366f1" },
+  about_genesis: { title: "About Genesis", icon: "/icons/pixel/file.svg", color: "#10b981" },
+  about_personal: { title: "About Personal Website", icon: "/icons/pixel/file.svg", color: "#f59e0b" },
+  about_nebula: { title: "About Nebula", icon: "/icons/pixel/file.svg", color: "#8b5cf6" },
+  essay_draft: { title: "Essay Draft", icon: "/icons/pixel/file.svg", color: "#cbd5e1" },
 };
 
 function AppFrame({
@@ -85,6 +94,24 @@ export function getDefaultTitle(appId: AppId) {
       return "Image Viewer";
     case "explorer":
       return "File Explorer";
+    case "fynopsis":
+      return "Fynopsis";
+    case "genesis":
+      return "Genesis";
+    case "personal_website_iframe":
+      return "oronila.github.io";
+    case "nebula":
+      return "Nebula";
+    case "about_fynopsis":
+      return "About Fynopsis";
+    case "about_genesis":
+      return "About Genesis";
+    case "about_personal":
+      return "About Personal Website";
+    case "about_nebula":
+      return "About Nebula";
+    case "essay_draft":
+      return "Essay Draft";
     default:
       return "App";
   }
@@ -113,6 +140,60 @@ projects at github.
 i used to work on fynopsis.ai and trynebula.ai.
 
 always happy to chat — reach me by email (noormehdiali@gmail.com).`}
+        />
+      );
+    case "about_fynopsis":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`Fynopsis
+
+An AI-powered platform for understanding and analyzing financial data. 
+
+[Filler text: this is where more details about Fynopsis will naturally go... like how it changes the game!]`}
+        />
+      );
+    case "about_genesis":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`Genesis
+
+A very special project. 
+
+[Filler text: more cool info about Genesis genesisut.com goes here.]`}
+        />
+      );
+    case "about_personal":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`Personal Website
+
+The recursion is real. This is the website you are currently looking at.
+Built with Next.js, Tailwind, and a lot of pixel art vibes.
+
+[Filler text: insert more cool facts about your dotcom here.]`}
+        />
+      );
+    case "about_nebula":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`Nebula
+
+Try Nebula AI. 
+
+[Filler text: describe what Nebula does, the tech stack, the mission, etc.]`}
+        />
+      );
+    case "essay_draft":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`The catcher in the rye is...
+
+[Filler text: "If you really want to hear about it, the first thing you'll probably want to know is where I was born, and what my lousy childhood was like, and how my parents were occupied and all before they had me, and all that David Copperfield kind of crap, but I don't feel like going into it, if you want to know the truth." - J.D. Salinger]`}
         />
       );
     case "projects":
@@ -269,6 +350,46 @@ always happy to chat — reach me by email (noormehdiali@gmail.com).`}
           <div className="bg-black text-neutral-500 text-[10px] p-1 text-center font-pixel">
             Play Run 3 with a cloaked about:blank!
           </div>
+        </div>
+      );
+    case "fynopsis":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://fynopsis.ai"
+            className="w-full h-full border-none"
+            title="Fynopsis"
+          />
+        </div>
+      );
+    case "genesis":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://genesisut.com"
+            className="w-full h-full border-none"
+            title="Genesis"
+          />
+        </div>
+      );
+    case "personal_website_iframe":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://oronila.github.io"
+            className="w-full h-full border-none"
+            title="oronila.github.io"
+          />
+        </div>
+      );
+    case "nebula":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://trynebula.ai"
+            className="w-full h-full border-none"
+            title="Nebula"
+          />
         </div>
       );
   }

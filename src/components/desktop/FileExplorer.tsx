@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { PixelIcon } from "./PixelIcon";
 import { FileSystemItem } from "./fileSystem";
 import type { AppId } from "./types";
+import { APP_CONFIG } from "./apps";
 
 export default function FileExplorer({
     initialData,
@@ -43,15 +44,14 @@ export default function FileExplorer({
                 onError(item.content);
                 return;
             }
-            if (item.id === "youtube_link" && onOpenApp) {
-                onOpenApp("youtube");
+            // Generic: if content matches a known AppId, open that app
+            if (item.content && onOpenApp && item.content in APP_CONFIG) {
+                onOpenApp(item.content as AppId);
                 return;
             }
-            if (item.id === "rank_image" && onOpenApp) {
-                onOpenApp("image_viewer");
-                return;
+            if (item.content) {
+                alert(`Opening ${item.name}: ${item.content}`);
             }
-            alert(`Opening ${item.name}: ${item.content}`);
         }
     };
 

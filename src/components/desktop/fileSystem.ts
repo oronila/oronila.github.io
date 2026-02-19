@@ -42,39 +42,98 @@ export const TRASH_DATA: FileSystemItem[] = [
         name: "Essay_Draft_v1.txt",
         type: "file",
         icon: "/icons/pixel/file.svg",
-        content: "The catcher in the rye is...",
+        content: "essay_draft",
     },
 ];
 
 export const PROJECTS_DATA: FileSystemItem[] = [
     {
-        id: "project-1",
+        id: "fynopsis-folder",
+        name: "Fynopsis",
+        type: "folder",
+        icon: "/icons/pack/folder.svg",
+        children: [
+            {
+                id: "fynopsis-info",
+                name: "about.txt",
+                type: "file",
+                icon: "/icons/pixel/file.svg",
+                content: "about_fynopsis",
+            },
+            {
+                id: "fynopsis-browser",
+                name: "fynopsis.ai",
+                type: "file",
+                icon: "/icons/pack/svgs-small/Google Chrome.svg",
+                content: "fynopsis",
+            },
+        ],
+    },
+    {
+        id: "genesis-folder",
+        name: "Genesis",
+        type: "folder",
+        icon: "/icons/pack/folder.svg",
+        children: [
+            {
+                id: "genesis-info",
+                name: "about.txt",
+                type: "file",
+                icon: "/icons/pixel/file.svg",
+                content: "about_genesis",
+            },
+            {
+                id: "genesis-browser",
+                name: "genesisut.com",
+                type: "file",
+                icon: "/icons/pack/svgs-small/Google Chrome.svg",
+                content: "genesis",
+            },
+        ],
+    },
+    {
+        id: "personal-website-folder",
         name: "Personal Website",
         type: "folder",
         icon: "/icons/pack/folder.svg",
         children: [
             {
-                id: "readme",
-                name: "README.md",
+                id: "personal-website-info",
+                name: "about.txt",
                 type: "file",
                 icon: "/icons/pixel/file.svg",
-                content: "# Personal Website\nBuilt with Next.js and Tailwind.",
+                content: "about_personal",
             },
             {
-                id: "src",
-                name: "src",
-                type: "folder",
-                children: [],
-                icon: "/icons/pack/folder.svg",
-            }
+                id: "personal-website-browser",
+                name: "oronila.github.io",
+                type: "file",
+                icon: "/icons/pack/svgs-small/Google Chrome.svg",
+                content: "personal_website_iframe",
+            },
         ],
     },
     {
-        id: "project-2",
-        name: "AI Experiments",
+        id: "nebula-folder",
+        name: "Nebula",
         type: "folder",
-        children: [],
         icon: "/icons/pack/folder.svg",
+        children: [
+            {
+                id: "nebula-info",
+                name: "about.txt",
+                type: "file",
+                icon: "/icons/pixel/file.svg",
+                content: "about_nebula",
+            },
+            {
+                id: "nebula-browser",
+                name: "trynebula.ai",
+                type: "file",
+                icon: "/icons/pack/svgs-small/Google Chrome.svg",
+                content: "nebula",
+            },
+        ],
     },
 ];
 

@@ -14,7 +14,17 @@ export type AppId =
   | "game_2048"
   | "game_flappy"
   | "game_run3"
-  | "explorer";
+  | "explorer"
+  | "explorer"
+  | "fynopsis"
+  | "genesis"
+  | "personal_website_iframe"
+  | "nebula"
+  | "about_fynopsis"
+  | "about_genesis"
+  | "about_personal"
+  | "about_nebula"
+  | "essay_draft";
 
 export type DesktopIcon = {
   id: AppId;
