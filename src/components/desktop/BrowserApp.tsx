@@ -1,13 +1,15 @@
 import React from "react";
 
 export default function BrowserApp() {
+    const [page, setPage] = React.useState<"home" | "blog">("home");
+
     return (
         <div className="h-full w-full bg-white text-black font-serif overflow-hidden flex flex-col">
             {/* Address Bar */}
             <div className="bg-[#bfbfbf] p-1 border-b-2 border-white border-r-2 border-l-2 border-l-white border-t-2 border-t-white border-r-[#404040] border-b-[#404040] flex gap-2 items-center text-sm mb-0">
                 <div className="text-gray-600">Address:</div>
                 <div className="flex-1 bg-white border border-[#404040] px-2 py-0.5 font-sans inset-shadow">
-                    http://www.noorali.com/home.html
+                    {page === "home" ? "http://www.noorali.com/home.html" : "http://www.noorali.com/blog.html"}
                 </div>
                 <div className="text-gray-600">Go</div>
             </div>
@@ -18,7 +20,7 @@ export default function BrowserApp() {
                     <div className="text-center border-b-4 border-double border-black pb-4 mb-4">
                         <h1 className="text-4xl text-blue-800 font-bold mb-2">Welcome to Noor&apos;s Web World</h1>
                         <marquee className="bg-yellow-200 border border-black p-1 font-bold text-red-600">
-                            *** UNDER CONSTRUCTION *** WELCOME VISITOR #1337 *** DON'T FORGET TO SIGN THE GUESTBOOK ***
+                            *** UNDER CONSTRUCTION *** CHECK BACK SOON *** SIGN THE GUESTBOOK ***
                         </marquee>
                     </div>
 
@@ -26,12 +28,9 @@ export default function BrowserApp() {
                         {/* Sidebar */}
                         <div className="w-full md:w-48 shrink-0 bg-[#f0f0f0] p-3 border-2 border-gray-400 h-fit">
                             <h3 className="font-bold text-center bg-blue-800 text-white mb-2 py-1">Navigation</h3>
-                            <ul className="list-disc pl-5 space-y-1 text-blue-800 underline">
-                                <li><a href="#" className="hover:text-red-600">Home</a></li>
-                                <li><a href="#" className="hover:text-red-600">About Me</a></li>
-                                <li><a href="#" className="hover:text-red-600">My Cool Links</a></li>
-                                <li><a href="#" className="hover:text-red-600">Webring</a></li>
-                                <li><a href="mailto:contact@noorali.com" className="hover:text-red-600">Email Me</a></li>
+                            <ul className="list-disc pl-5 space-y-1 text-blue-800 underline cursor-pointer">
+                                <li><a onClick={() => setPage("home")} className="hover:text-red-600">Home</a></li>
+                                <li><a onClick={() => setPage("blog")} className="hover:text-red-600">Blog</a></li>
                             </ul>
 
                             <h3 className="font-bold text-center bg-green-700 text-white mt-4 mb-2 py-1">Cool Sites</h3>
@@ -47,27 +46,30 @@ export default function BrowserApp() {
 
                         {/* Main Content */}
                         <div className="flex-1">
-                            <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">Latest Updates</h2>
-
-                            <div className="mb-6">
-                                <h3 className="font-bold text-lg text-blue-900 border-b border-gray-400">Feb 18, 2026 - New Look!</h3>
-                                <p className="mt-2 text-sm leading-relaxed">
-                                    Finally updated the layout! I learned some new HTML tables tricks.
-                                    Thinking about adding a hit counter soon.
-                                    Does anyone know how to make the MIDI music stop looping?
-                                </p>
-                                <div className="text-xs text-gray-500 mt-1 italic">Posted by: WebMaster_Noor</div>
-                            </div>
-
-                            <div className="mb-6">
-                                <h3 className="font-bold text-lg text-blue-900 border-b border-gray-400">Jan 05, 2026 - Hello World</h3>
-                                <p className="mt-2 text-sm leading-relaxed">
-                                    Welcome to my personal corner of the information superhighway.
-                                    Here I will post about my coding projects and cool things I find.
-                                    Stay tuned for more updates!
-                                </p>
-                                <div className="text-xs text-gray-500 mt-1 italic">Posted by: WebMaster_Noor</div>
-                            </div>
+                            {page === "home" ? (
+                                <>
+                                    <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">Latest Updates</h2>
+                                    <div className="mb-6">
+                                        <h3 className="font-bold text-lg text-blue-900 border-b border-gray-400">Feb 18, 2026</h3>
+                                        <p className="mt-2 text-sm leading-relaxed">
+                                            Just getting things set up here. More content is coming soon...
+                                        </p>
+                                        <div className="text-xs text-gray-500 mt-1 italic">Posted by: WebMaster_Noor</div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">My Blog</h2>
+                                    <div className="mb-6">
+                                        <p className="mt-2 text-sm leading-relaxed italic text-center text-gray-500">
+                                            ... Content Loading ...
+                                        </p>
+                                        <p className="mt-4 text-center font-bold text-red-600">
+                                            Blog posts are coming soon!
+                                        </p>
+                                    </div>
+                                </>
+                            )}
 
                             <div className="border-t-2 border-black pt-4 mt-8 text-center text-xs">
                                 <p>Best viewed with Netscape Navigator 4.0 at 800x600 resolution.</p>
