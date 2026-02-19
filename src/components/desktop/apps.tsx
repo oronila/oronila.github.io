@@ -67,7 +67,7 @@ export function getDefaultTitle(appId: AppId) {
     case "music":
       return "Music";
     case "contact":
-      return "Contact (Browser)";
+      return "Browser";
     case "trash":
       return "Trash";
     case "games":
