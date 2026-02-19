@@ -129,6 +129,12 @@ const DEFAULT_ICONS: DesktopIcon[] = [
 import ErrorPopup from "./ErrorPopup";
 
 export default function Desktop() {
+  const WALLPAPERS = [
+    "/pixel-bg2.png",
+    "/pixel-background.gif",
+  ];
+  const [wallpaperIndex, setWallpaperIndex] = useState(0);
+
   const [icons, setIcons] = useState<DesktopIcon[]>(DEFAULT_ICONS);
   const [errorPopup, setErrorPopup] = useState<string | null>(null);
 
@@ -146,6 +152,7 @@ export default function Desktop() {
   useEffect(() => {
     const savedWindows = localStorage.getItem(STORAGE_KEY);
     const savedIcons = localStorage.getItem(ICONS_STORAGE_KEY);
+    const savedWallpaper = localStorage.getItem("nooros_wallpaper_index");
 
     if (savedWindows) {
       try {
@@ -163,6 +170,13 @@ export default function Desktop() {
       } catch (e) { console.error("Failed to load icons", e); }
     }
 
+    if (savedWallpaper) {
+      const idx = parseInt(savedWallpaper, 10);
+      if (!isNaN(idx)) {
+        setWallpaperIndex(idx);
+      }
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -171,8 +185,9 @@ export default function Desktop() {
     if (isLoaded) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(windows));
       localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(icons));
+      localStorage.setItem("nooros_wallpaper_index", wallpaperIndex.toString());
     }
-  }, [windows, icons, isLoaded]);
+  }, [windows, icons, isLoaded, wallpaperIndex]);
 
   const topZ = useMemo(
     () => windows.reduce((m, w) => Math.max(m, w.zIndex), 10),
@@ -422,12 +437,16 @@ export default function Desktop() {
     });
   }
 
-  const WALLPAPERS = [
-    "/pixel-bg2.png",
-    "/pixel-background.gif",
-  ];
 
-  const [wallpaperIndex, setWallpaperIndex] = useState(0);
+
+  function handleReset() {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("nooros_browser_state");
+    localStorage.removeItem("nooros_wallpaper_index");
+    // Force overwrite icons with defaults to ensure next load picks them up
+    localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
+    window.location.reload();
+  }
 
   const BACKGROUND_MENU_ITEMS: MenuItem[] = [
     { label: "Get Info", action: () => console.log("Get Info") },
@@ -440,12 +459,7 @@ export default function Desktop() {
     { separator: true },
     {
       label: "Reset",
-      action: () => {
-        localStorage.removeItem(STORAGE_KEY);
-        // Force overwrite icons with defaults to ensure next load picks them up
-        localStorage.setItem(ICONS_STORAGE_KEY, JSON.stringify(DEFAULT_ICONS));
-        window.location.reload();
-      }
+      action: handleReset
     },
   ];
 
@@ -459,7 +473,7 @@ export default function Desktop() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <TopBar onOpenApp={openApp} />
+      <TopBar onOpenApp={openApp} onRestart={handleReset} />
 
       {/* Wallpapers with Cross-fade */}
       {WALLPAPERS.map((src, index) => {

@@ -3,6 +3,19 @@ import React from "react";
 export default function BrowserApp() {
     const [page, setPage] = React.useState<"home" | "blog">("home");
 
+    // Load state
+    React.useEffect(() => {
+        const saved = localStorage.getItem("nooros_browser_state");
+        if (saved === "home" || saved === "blog") {
+            setPage(saved);
+        }
+    }, []);
+
+    // Save state
+    React.useEffect(() => {
+        localStorage.setItem("nooros_browser_state", page);
+    }, [page]);
+
     return (
         <div className="h-full w-full bg-white text-black font-serif overflow-hidden flex flex-col">
             {/* Address Bar */}

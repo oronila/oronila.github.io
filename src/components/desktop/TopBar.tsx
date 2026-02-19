@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { AppId } from "./types";
 import Screensaver from "./Screensaver";
 
-export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }) {
+export default function TopBar({ onOpenApp, onRestart }: { onOpenApp: (id: AppId) => void; onRestart: () => void }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAsleep, setIsAsleep] = useState(false);
     const [time, setTime] = useState<string>("");
@@ -115,8 +115,9 @@ export default function TopBar({ onOpenApp }: { onOpenApp: (id: AppId) => void }
                             <div className="my-1 h-[2px] bg-neutral-700" />
                             <button
                                 onClick={() => {
-                                    window.location.reload();
                                     setMenuOpen(false);
+                                    // window.location.reload(); // Replaced by onRestart prop
+                                    onRestart();
                                 }}
                                 className="text-left px-4 py-1.5 hover:bg-[#3b82f6] hover:text-white text-neutral-100 uppercase text-xs"
                             >
