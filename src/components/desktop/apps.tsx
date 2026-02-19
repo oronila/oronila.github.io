@@ -1,10 +1,11 @@
 import type { AppId } from "./types";
 import TerminalApp from "./TerminalApp";
 import FileExplorer from "./FileExplorer";
+import BrowserApp from "./BrowserApp";
 import { TRASH_DATA, PROJECTS_DATA } from "./fileSystem";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
-  about: { title: "About.txt", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
+  about: { title: "About Me", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
   projects: { title: "Projects", icon: "/icons/pack/folder.svg", color: "#fbbf24" },
   resume: { title: "Resume", icon: "/icons/pack/svgs-small/LinkedIn.svg", color: "#34d399" },
   terminal: { title: "Terminal", icon: "/icons/pixel/terminal.svg", color: "#000000" },
@@ -15,6 +16,7 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   youtube: { title: "Oronila Youtube", icon: "/icons/pack/svgs-small/Youtube.svg", color: "#ff0000" },
   system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
   image_viewer: { title: "Image Viewer", icon: "/icons/pixel/file.svg", color: "#a78bfa" },
+  game_slope: { title: "Slope", icon: "/icons/pack/svgs-small/Steam.svg", color: "#22c55e" },
 };
 
 function AppFrame({
@@ -55,7 +57,7 @@ function SystemInfo() {
 export function getDefaultTitle(appId: AppId) {
   switch (appId) {
     case "about":
-      return "About.txt";
+      return "About Me";
     case "projects":
       return "Projects";
     case "resume":
@@ -69,13 +71,15 @@ export function getDefaultTitle(appId: AppId) {
     case "trash":
       return "Trash";
     case "games":
-      return "Games";
+      return "Games Library";
     case "youtube":
       return "Oronila Youtube";
     case "system":
       return "About Noor's Mac";
     case "image_viewer":
       return "Image Viewer";
+    case "game_slope":
+      return "Slope";
     default:
       return "App";
   }
@@ -124,25 +128,40 @@ always happy to chat — reach me by email.`}
       return <TerminalApp />;
     case "music":
       return (
-        <AppFrame title="Music">
-          <p>Now playing / favorites coming next.</p>
-        </AppFrame>
+        <div className="h-full w-full bg-black flex items-center justify-center p-4">
+          <iframe
+            style={{ borderRadius: "12px" }}
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1EQqkOPvHGajmW?utm_source=generator"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            allowFullScreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title="Spotify"
+          />
+        </div>
       );
     case "contact":
-      return (
-        <AppFrame title="Contact">
-          <p>
-            A “browser-style” contact app coming next (links, email, socials).
-          </p>
-        </AppFrame>
-      );
+      return <BrowserApp />;
     case "trash":
       return <FileExplorer initialData={TRASH_DATA} onError={onError} onOpenApp={onOpenApp} />;
     case "games":
       return (
-        <AppFrame title="Games">
-          <p>Steam library integration coming next.</p>
-        </AppFrame>
+        <div className="h-full w-full bg-[#1e1e1e] p-4 text-neutral-200 font-pixel">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4">
+            <button
+              className="flex flex-col items-center gap-2 p-4 hover:bg-white/10 rounded transition-colors group"
+              onClick={() => onOpenApp?.("game_slope")}
+            >
+              <div className="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-black font-bold text-xl group-hover:scale-110 transition-transform">
+                S
+              </div>
+              <div className="text-xs">Slope</div>
+            </button>
+            {/* Future games can be added here */}
+          </div>
+        </div>
       );
     case "youtube":
       return (
@@ -165,6 +184,16 @@ always happy to chat — reach me by email.`}
         <div className="flex items-center justify-center h-full w-full bg-[#1e1e1e]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/rank.png" alt="Rank" className="max-w-full max-h-full object-contain" />
+        </div>
+      );
+    case "game_slope":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://storage.y8.com/y8-studio/unity/joll/slope/?key=9757549&value=80527"
+            className="w-full h-full border-none"
+            title="Slope"
+          />
         </div>
       );
   }

@@ -166,9 +166,6 @@ export default function FileExplorer({
             ) : (
                 <>
                     <button className="px-4 py-1 text-left hover:bg-[#000080] hover:text-white text-black text-xs">
-                        New Folder
-                    </button>
-                    <button className="px-4 py-1 text-left hover:bg-[#000080] hover:text-white text-black text-xs">
                         Get Info
                     </button>
                     <button className="px-4 py-1 text-left hover:bg-[#000080] hover:text-white text-black text-xs">

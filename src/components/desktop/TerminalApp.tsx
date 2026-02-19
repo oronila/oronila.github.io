@@ -55,7 +55,7 @@ export default function TerminalApp() {
             case "ls":
                 newHistory.push({
                     type: "output",
-                    content: `About.txt
+                    content: `About Me
 Projects/
 Resume
 Music/
@@ -76,7 +76,7 @@ Contact.lnk`,
                     newHistory.push({ type: "output", content: "Usage: cat [filename]" });
                 } else {
                     const filename = args[0];
-                    if (filename === "About.txt") {
+                    if (filename === "About Me") {
                         newHistory.push({
                             type: "output",
                             content: `Noor Ali

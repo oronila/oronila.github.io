@@ -1,0 +1,82 @@
+import React from "react";
+
+export default function BrowserApp() {
+    return (
+        <div className="h-full w-full bg-white text-black font-serif overflow-hidden flex flex-col">
+            {/* Address Bar */}
+            <div className="bg-[#bfbfbf] p-1 border-b-2 border-white border-r-2 border-l-2 border-l-white border-t-2 border-t-white border-r-[#404040] border-b-[#404040] flex gap-2 items-center text-sm mb-0">
+                <div className="text-gray-600">Address:</div>
+                <div className="flex-1 bg-white border border-[#404040] px-2 py-0.5 font-sans inset-shadow">
+                    http://www.noorali.com/home.html
+                </div>
+                <div className="text-gray-600">Go</div>
+            </div>
+
+            <div className="flex-1 overflow-auto p-4 bg-[url('/bg_mesh.png')]">
+                <div className="max-w-3xl mx-auto border-4 border-blue-800 bg-white p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
+                    {/* Header */}
+                    <div className="text-center border-b-4 border-double border-black pb-4 mb-4">
+                        <h1 className="text-4xl text-blue-800 font-bold mb-2">Welcome to Noor&apos;s Web World</h1>
+                        <marquee className="bg-yellow-200 border border-black p-1 font-bold text-red-600">
+                            *** UNDER CONSTRUCTION *** WELCOME VISITOR #1337 *** DON'T FORGET TO SIGN THE GUESTBOOK ***
+                        </marquee>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-6">
+                        {/* Sidebar */}
+                        <div className="w-full md:w-48 shrink-0 bg-[#f0f0f0] p-3 border-2 border-gray-400 h-fit">
+                            <h3 className="font-bold text-center bg-blue-800 text-white mb-2 py-1">Navigation</h3>
+                            <ul className="list-disc pl-5 space-y-1 text-blue-800 underline">
+                                <li><a href="#" className="hover:text-red-600">Home</a></li>
+                                <li><a href="#" className="hover:text-red-600">About Me</a></li>
+                                <li><a href="#" className="hover:text-red-600">My Cool Links</a></li>
+                                <li><a href="#" className="hover:text-red-600">Webring</a></li>
+                                <li><a href="mailto:contact@noorali.com" className="hover:text-red-600">Email Me</a></li>
+                            </ul>
+
+                            <h3 className="font-bold text-center bg-green-700 text-white mt-4 mb-2 py-1">Cool Sites</h3>
+                            <div className="text-center space-y-2 text-xs">
+                                <a href="https://github.com/onorila" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
+                                    <span className="inline-block mr-1">💾</span>My GitHub
+                                </a>
+                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
+                                    <span className="inline-block mr-1">🐦</span>Twitter
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="flex-1">
+                            <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">Latest Updates</h2>
+
+                            <div className="mb-6">
+                                <h3 className="font-bold text-lg text-blue-900 border-b border-gray-400">Feb 18, 2026 - New Look!</h3>
+                                <p className="mt-2 text-sm leading-relaxed">
+                                    Finally updated the layout! I learned some new HTML tables tricks.
+                                    Thinking about adding a hit counter soon.
+                                    Does anyone know how to make the MIDI music stop looping?
+                                </p>
+                                <div className="text-xs text-gray-500 mt-1 italic">Posted by: WebMaster_Noor</div>
+                            </div>
+
+                            <div className="mb-6">
+                                <h3 className="font-bold text-lg text-blue-900 border-b border-gray-400">Jan 05, 2026 - Hello World</h3>
+                                <p className="mt-2 text-sm leading-relaxed">
+                                    Welcome to my personal corner of the information superhighway.
+                                    Here I will post about my coding projects and cool things I find.
+                                    Stay tuned for more updates!
+                                </p>
+                                <div className="text-xs text-gray-500 mt-1 italic">Posted by: WebMaster_Noor</div>
+                            </div>
+
+                            <div className="border-t-2 border-black pt-4 mt-8 text-center text-xs">
+                                <p>Best viewed with Netscape Navigator 4.0 at 800x600 resolution.</p>
+                                <p>&copy; 1999-2026 Noor Ali. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

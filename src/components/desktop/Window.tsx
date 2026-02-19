@@ -42,7 +42,7 @@ export default function Window({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  if (win.isMinimized) return null;
+  // if (win.isMinimized) return null; // Removed to keep content alive
 
   return (
     <Draggable
@@ -69,7 +69,8 @@ export default function Window({
         onMouseDownCapture={() => onFocus(win.instanceId)}
         className="fixed border-4 border-black bg-neutral-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden"
         style={{
-          zIndex: win.zIndex
+          zIndex: win.zIndex,
+          display: win.isMinimized ? "none" : "flex",
         }}
         role="dialog"
         aria-label={win.title}

@@ -405,11 +405,20 @@ export default function Desktop() {
     });
   }
 
+  const WALLPAPERS = [
+    "/pixel-bg2.png",
+    "/pixel-background.gif",
+  ];
+
+  const [wallpaperIndex, setWallpaperIndex] = useState(0);
+
   const BACKGROUND_MENU_ITEMS: MenuItem[] = [
-    { label: "New Folder", action: () => console.log("New Folder") },
     { label: "Get Info", action: () => console.log("Get Info") },
     { separator: true },
-    { label: "Change Wallpaper", action: () => console.log("Change Wallpaper") },
+    {
+      label: "Change Wallpaper",
+      action: () => setWallpaperIndex(prev => (prev + 1) % WALLPAPERS.length)
+    },
     { label: "Clean Up", action: () => console.log("Clean Up"), disabled: true },
     { separator: true },
     {
@@ -434,15 +443,29 @@ export default function Desktop() {
       onMouseUp={handleMouseUp}
     >
       <TopBar onOpenApp={openApp} />
-      {/* wallpaper */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/pixel-background.gif')",
-          imageRendering: "pixelated"
-        }}
-      />
-      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+
+      {/* Wallpapers with Cross-fade */}
+      {WALLPAPERS.map((src, index) => {
+        // Special positioning for pixel-bg2 to center character on mobile
+        // We assume "offset to the right" means showing more of the left side, so we shift focus left (35%)
+        const isPixelBg2 = src.includes('pixel-bg2');
+        const bgPositionClass = isPixelBg2 ? 'bg-[35%_center] md:bg-center' : 'bg-center';
+
+        return (
+          <div
+            key={src}
+            className={`absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-1000 ease-in-out ${bgPositionClass}`}
+            style={{
+              backgroundImage: `url('${src}')`,
+              imageRendering: "pixelated",
+              opacity: index === wallpaperIndex ? 1 : 0,
+              zIndex: 0,
+            }}
+          />
+        );
+      })}
+
+      <div className="absolute inset-0 bg-black/20 pointer-events-none z-[1]" />
 
       {/* Error Popup */}
       {errorPopup && (
