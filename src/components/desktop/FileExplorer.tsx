@@ -39,7 +39,7 @@ export default function FileExplorer({
             setCurrentPath([...currentPath, item]);
             setSelectedIds([]);
         } else {
-            if (item.name === "Install.log" && onError && item.content) {
+            if (item.name === "Install.bat" && onError && item.content) {
                 onError(item.content);
                 return;
             }

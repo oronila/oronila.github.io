@@ -16,7 +16,7 @@ export const TRASH_DATA: FileSystemItem[] = [
         children: [
             {
                 id: "install-log",
-                name: "Install.log",
+                name: "Install.bat",
                 type: "file",
                 icon: "/icons/pixel/file.svg",
                 content: "Installation failed. Reason: Skill issue.",
