@@ -512,7 +512,7 @@ export default function Desktop() {
   }
 
   const BACKGROUND_MENU_ITEMS: MenuItem[] = [
-    { label: "Get Info", action: () => console.log("Get Info") },
+    { label: "Get Info", action: () => openApp("system") },
     { separator: true },
     {
       label: "Change Wallpaper",
