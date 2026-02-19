@@ -75,6 +75,10 @@ export default function Window({
         role="dialog"
         aria-label={win.title}
         data-window-id={win.instanceId}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
       >
         <Resizable
           size={{ width: win.size.width, height: win.size.height }}
