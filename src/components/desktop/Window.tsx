@@ -74,6 +74,7 @@ export default function Window({
         }}
         role="dialog"
         aria-label={win.title}
+        data-window-id={win.instanceId}
       >
         <Resizable
           size={{ width: win.size.width, height: win.size.height }}

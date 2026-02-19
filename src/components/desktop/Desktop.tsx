@@ -210,6 +210,42 @@ export default function Desktop() {
 
   const MAXIMIZED_Z = 10000;
 
+  // Iframe focus detection
+  useEffect(() => {
+    const handleFocus = () => {
+      // Check immediately
+      const active = document.activeElement;
+      if (active && active.tagName === "IFRAME") {
+        const windowEl = active.closest("[data-window-id]");
+        if (windowEl) {
+          const instanceId = windowEl.getAttribute("data-window-id");
+          if (instanceId) {
+            setWindows((prev) => {
+              const currentTop = prev.reduce((m, w) => Math.max(m, w.zIndex), 10);
+              const targetWin = prev.find(w => w.instanceId === instanceId);
+
+              if (targetWin && targetWin.zIndex === currentTop && !targetWin.isMaximized) return prev;
+
+              return prev.map((w) =>
+                w.instanceId === instanceId
+                  ? { ...w, zIndex: w.isMaximized ? MAXIMIZED_Z : currentTop + 1 }
+                  : w,
+              );
+            });
+          }
+        }
+      }
+    };
+
+    window.addEventListener("blur", handleFocus);
+    // Use capture to catch focus events as they trickle down to iframes
+    window.addEventListener("focus", handleFocus, true);
+    return () => {
+      window.removeEventListener("blur", handleFocus);
+      window.removeEventListener("focus", handleFocus, true);
+    };
+  }, []);
+
   function openApp(appId: AppId) {
     const currentWindows = windowsRef.current;
     const existing = currentWindows.find((w) => w.appId === appId);
