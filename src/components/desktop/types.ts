@@ -10,7 +10,10 @@ export type AppId =
   | "games"
   | "youtube"
   | "image_viewer"
-  | "game_slope";
+  | "game_slope"
+  | "game_2048"
+  | "game_flappy"
+  | "game_run3";
 
 export type DesktopIcon = {
   id: AppId;

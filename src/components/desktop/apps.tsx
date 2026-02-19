@@ -17,6 +17,9 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   system: { title: "About Noor's Mac", icon: "cog", color: "#6b7280" },
   image_viewer: { title: "Image Viewer", icon: "/icons/pixel/file.svg", color: "#a78bfa" },
   game_slope: { title: "Slope", icon: "/icons/pack/svgs-small/Steam.svg", color: "#22c55e" },
+  game_2048: { title: "2048", icon: "/icons/pack/svgs-small/Steam.svg", color: "#edc22e" },
+  game_flappy: { title: "Flappy Bird", icon: "/icons/pack/svgs-small/Steam.svg", color: "#fbbf24" },
+  game_run3: { title: "Run 3", icon: "/icons/pack/svgs-small/Steam.svg", color: "#3b82f6" },
 };
 
 function AppFrame({
@@ -80,6 +83,12 @@ export function getDefaultTitle(appId: AppId) {
       return "Image Viewer";
     case "game_slope":
       return "Slope";
+    case "game_2048":
+      return "2048";
+    case "game_flappy":
+      return "Flappy Bird";
+    case "game_run3":
+      return "Run 3";
     default:
       return "App";
   }
@@ -148,18 +157,51 @@ always happy to chat — reach me by email.`}
       return <FileExplorer initialData={TRASH_DATA} onError={onError} onOpenApp={onOpenApp} />;
     case "games":
       return (
-        <div className="h-full w-full bg-[#1e1e1e] p-4 text-neutral-200 font-pixel">
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4">
+        <div className="h-full w-full bg-[#1e1e1e] p-8 text-neutral-200 font-pixel">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-8">
             <button
-              className="flex flex-col items-center gap-2 p-4 hover:bg-white/10 rounded transition-colors group"
+              className="hidden md:flex flex-col items-center gap-3 hover:bg-white/5 p-4 rounded-xl transition-all group"
               onClick={() => onOpenApp?.("game_slope")}
             >
-              <div className="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-black font-bold text-xl group-hover:scale-110 transition-transform">
-                S
+              <div className="w-24 h-24 relative rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform border border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/slope.png" alt="Slope" className="w-full h-full object-cover" />
               </div>
-              <div className="text-xs">Slope</div>
+              <div className="text-sm font-medium tracking-wide">Slope</div>
             </button>
-            {/* Future games can be added here */}
+
+            <button
+              className="flex flex-col items-center gap-3 hover:bg-white/5 p-4 rounded-xl transition-all group"
+              onClick={() => onOpenApp?.("game_2048")}
+            >
+              <div className="w-24 h-24 relative rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform border border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/2048.png" alt="2048" className="w-full h-full object-cover" />
+              </div>
+              <div className="text-sm font-medium tracking-wide">2048</div>
+            </button>
+
+            <button
+              className="flex flex-col items-center gap-3 hover:bg-white/5 p-4 rounded-xl transition-all group"
+              onClick={() => onOpenApp?.("game_flappy")}
+            >
+              <div className="w-24 h-24 relative rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform border border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/flappy-bird.png" alt="Flappy Bird" className="w-full h-full object-cover" />
+              </div>
+              <div className="text-sm font-medium tracking-wide">Flappy Bird</div>
+            </button>
+
+            <button
+              className="hidden md:flex flex-col items-center gap-3 hover:bg-white/5 p-4 rounded-xl transition-all group"
+              onClick={() => onOpenApp?.("game_run3")}
+            >
+              <div className="w-24 h-24 relative rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform border border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/Run3.webp" alt="Run 3" className="w-full h-full object-cover" />
+              </div>
+              <div className="text-sm font-medium tracking-wide">Run 3</div>
+            </button>
           </div>
         </div>
       );
@@ -194,6 +236,40 @@ always happy to chat — reach me by email.`}
             className="w-full h-full border-none"
             title="Slope"
           />
+        </div>
+      );
+    case "game_2048":
+      return (
+        <div className="h-full w-full bg-black flex justify-center items-center">
+          <iframe
+            src="https://funhtml5games.com?embed=2048bit"
+            className="w-full h-full border-none"
+            title="2048"
+            scrolling="no"
+          />
+        </div>
+      );
+    case "game_flappy":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://flappybird.io/"
+            className="w-full h-full border-none"
+            title="Flappy Bird"
+          />
+        </div>
+      );
+    case "game_run3":
+      return (
+        <div className="h-full w-full bg-black flex flex-col">
+          <iframe
+            src="https://lekug.github.io/tn6pS9dCf37xAhkJv/"
+            className="w-full h-full border-none"
+            title="Run 3"
+          />
+          <div className="bg-black text-neutral-500 text-[10px] p-1 text-center font-pixel">
+            Play Run 3 with a cloaked about:blank!
+          </div>
         </div>
       );
   }
