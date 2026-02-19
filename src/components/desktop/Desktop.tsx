@@ -36,27 +36,45 @@ function DesktopIconView({
 }) {
   const nodeRef = useRef(null);
   const isDragging = useRef(false);
+  const dragDistance = useRef(0);
+  const TAP_MOVEMENT_THRESHOLD = 6;
+
+  function isMobileInteractionMode() {
+    return window.matchMedia("(max-width: 767px), (hover: none) and (pointer: coarse)").matches;
+  }
 
   return (
     <Draggable
       nodeRef={nodeRef}
       position={icon.position}
       onDrag={(_, data) => {
-        isDragging.current = true;
+        const movement = Math.abs(data.deltaX) + Math.abs(data.deltaY);
+        dragDistance.current += movement;
+        if (dragDistance.current > TAP_MOVEMENT_THRESHOLD) {
+          isDragging.current = true;
+        }
         onDrag(icon.id, { x: data.deltaX, y: data.deltaY });
       }}
       onStart={(e) => {
         isDragging.current = false;
+        dragDistance.current = 0;
         // If dragging an unselected item, select it exclusively
         if (!selected) {
           onSelect(icon.id, (e as MouseEvent).metaKey || (e as MouseEvent).shiftKey);
         }
       }}
       onStop={() => {
+        // Mobile taps don't always emit a reliable click through Draggable.
+        // Treat low-movement touch release as a single-tap "open".
+        if (isMobileInteractionMode() && dragDistance.current <= TAP_MOVEMENT_THRESHOLD) {
+          onOpen(icon.id);
+        }
+
         // We need to allow the click event to fire if it wasn't a drag
         // The click event fires after onStop
         setTimeout(() => {
           isDragging.current = false;
+          dragDistance.current = 0;
         }, 0);
       }}
       bounds="parent"
@@ -70,9 +88,8 @@ function DesktopIconView({
           e.stopPropagation();
           if (isDragging.current) return;
 
-          // Mobile single-tap open
-          if (window.innerWidth < 768) {
-            onOpen(icon.id);
+          // Mobile open is handled in onStop for better touch reliability.
+          if (isMobileInteractionMode()) {
             return;
           }
 
