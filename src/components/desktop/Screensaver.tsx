@@ -55,8 +55,11 @@ export default function Screensaver({ onWake }: { onWake: () => void }) {
         textRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
 
         if (hit) {
-            const nextColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-            setColor(nextColor);
+            // Change color (guarantee change)
+            setColor(prev => {
+                const candidates = COLORS.filter(c => c !== prev);
+                return candidates[Math.floor(Math.random() * candidates.length)];
+            });
         }
 
         requestRef.current = requestAnimationFrame(animate);

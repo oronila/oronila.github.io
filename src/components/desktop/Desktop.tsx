@@ -463,15 +463,7 @@ export default function Desktop() {
   }
 
   function handleRestart() {
-    handleReset();
-    // We need to set the flag AFTER clearing everything (handleReset wipes stuff), 
-    // but before reload happens.
-    // Actually handleReset calls reload() at the end, so we can't run code after it efficiently 
-    // unless we modify handleReset or copy logic.
-    // Let's just modify handleReset to NOT reload immediately, or just copy the logic here.
-    // Better yet, let's just write the flag after handleReset's clear logic but we need to intercept the reload.
-    // I'll rewrite handleRestart to duplicate the clear logic to be safe and explicit.
-
+    // Manually clear everything to ensure a clean slate
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem("nooros_browser_state");
     localStorage.removeItem("nooros_wallpaper_index");
