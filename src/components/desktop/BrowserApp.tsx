@@ -51,8 +51,11 @@ export default function BrowserApp() {
                                 <a href="https://github.com/onorila" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
                                     <span className="inline-block mr-1">💾</span>My GitHub
                                 </a>
-                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
-                                    <span className="inline-block mr-1">🐦</span>Twitter
+                                <a href="https://x.com/oronila_" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
+                                    <span className="inline-block mr-1">🐦</span>My Twitter/X
+                                </a>
+                                <a href="https://www.linkedin.com/in/noor-ali05/" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
+                                    <span className="inline-block mr-1">🐦</span>My LinkedIn
                                 </a>
                             </div>
                         </div>
@@ -85,8 +88,7 @@ export default function BrowserApp() {
                             )}
 
                             <div className="border-t-2 border-black pt-4 mt-8 text-center text-xs">
-                                <p>Best viewed with Netscape Navigator 4.0 at 800x600 resolution.</p>
-                                <p>&copy; 1999-2026 Noor Ali. All rights reserved.</p>
+                                <p>&copy; 2005-2026 Noor Ali. All rights reserved.</p>
                             </div>
                         </div>
                     </div>
