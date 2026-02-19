@@ -56,7 +56,7 @@ export default function Dock({
 
   const dockAppIds: AppId[] = [
     "about",
-    "projects",
+    "explorer",
     "resume",
     "terminal",
     "music",

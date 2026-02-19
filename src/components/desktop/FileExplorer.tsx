@@ -8,10 +8,12 @@ export default function FileExplorer({
     initialData,
     onError,
     onOpenApp,
+    title = "File Explorer",
 }: {
     initialData: FileSystemItem[];
     onError?: (message: string) => void;
     onOpenApp?: (id: AppId) => void;
+    title?: string;
 }) {
     const [currentPath, setCurrentPath] = useState<FileSystemItem[]>([]);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -192,7 +194,7 @@ export default function FileExplorer({
                     </div>
                 </button>
                 <div className="text-xs text-neutral-400">
-                    {currentPath.length === 0 ? "Root" : currentPath.map(p => p.name).join(" / ")}
+                    {currentPath.length === 0 ? title : currentPath.map(p => p.name).join(" / ")}
                 </div>
             </div>
 

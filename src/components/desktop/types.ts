@@ -13,7 +13,8 @@ export type AppId =
   | "game_slope"
   | "game_2048"
   | "game_flappy"
-  | "game_run3";
+  | "game_run3"
+  | "explorer";
 
 export type DesktopIcon = {
   id: AppId;

@@ -77,3 +77,62 @@ export const PROJECTS_DATA: FileSystemItem[] = [
         icon: "/icons/pack/folder.svg",
     },
 ];
+
+export const DESKTOP_DATA: FileSystemItem[] = [
+    {
+        id: "about_shortcut",
+        name: "About Me",
+        type: "file",
+        icon: "/icons/pack/svgs-small/Google Docs.svg",
+        content: "about", // Special ID for opening app
+    },
+    {
+        id: "projects_shortcut",
+        name: "Projects",
+        type: "folder", // It's actually a folder in the file system logic
+        icon: "/icons/pack/folder.svg",
+        children: PROJECTS_DATA,
+    },
+    {
+        id: "resume_shortcut",
+        name: "Resume",
+        type: "file",
+        icon: "/icons/pack/svgs-small/LinkedIn.svg",
+        content: "resume",
+    },
+    {
+        id: "terminal_shortcut",
+        name: "Terminal",
+        type: "file",
+        icon: "/icons/pixel/terminal.svg",
+        content: "terminal",
+    },
+    {
+        id: "music_shortcut",
+        name: "Music",
+        type: "file",
+        icon: "/icons/pack/svgs-small/Spotify.svg",
+        content: "music",
+    },
+    {
+        id: "games_shortcut",
+        name: "Games",
+        type: "file",
+        icon: "/icons/pack/svgs-small/Steam.svg",
+        content: "games",
+    },
+    {
+        id: "contact_shortcut",
+        name: "Browser",
+        type: "file",
+        icon: "/icons/pack/svgs-small/Google Chrome.svg",
+        content: "contact",
+    },
+    {
+        id: "trash_shortcut",
+        name: "Trash",
+        type: "folder",
+        icon: "/icons/pixel/trash.svg",
+        children: TRASH_DATA,
+    },
+];

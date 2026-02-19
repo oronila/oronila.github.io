@@ -2,7 +2,7 @@ import type { AppId } from "./types";
 import TerminalApp from "./TerminalApp";
 import FileExplorer from "./FileExplorer";
 import BrowserApp from "./BrowserApp";
-import { TRASH_DATA, PROJECTS_DATA } from "./fileSystem";
+import { TRASH_DATA, PROJECTS_DATA, DESKTOP_DATA } from "./fileSystem";
 
 export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: string }> = {
   about: { title: "About Me", icon: "/icons/pack/svgs-small/Google Docs.svg", color: "#38bdf8" },
@@ -20,6 +20,7 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   game_2048: { title: "2048", icon: "/icons/pack/svgs-small/Steam.svg", color: "#edc22e" },
   game_flappy: { title: "Flappy Bird", icon: "/icons/pack/svgs-small/Steam.svg", color: "#fbbf24" },
   game_run3: { title: "Run 3", icon: "/icons/pack/svgs-small/Steam.svg", color: "#3b82f6" },
+  explorer: { title: "File Explorer", icon: "/icons/pack/file-explorer.svg", color: "#3b82f6" },
 };
 
 function AppFrame({
@@ -69,26 +70,21 @@ export function getDefaultTitle(appId: AppId) {
       return "Terminal";
     case "music":
       return "Music";
+      return "Music Player";
     case "contact":
       return "Browser";
     case "trash":
       return "Trash";
     case "games":
-      return "Games Library";
+      return "Game Library";
     case "youtube":
-      return "Oronila Youtube";
+      return "YouTube";
     case "system":
-      return "About Noor's Mac";
+      return "About This Mac";
     case "image_viewer":
       return "Image Viewer";
-    case "game_slope":
-      return "Slope";
-    case "game_2048":
-      return "2048";
-    case "game_flappy":
-      return "Flappy Bird";
-    case "game_run3":
-      return "Run 3";
+    case "explorer":
+      return "File Explorer";
     default:
       return "App";
   }
@@ -120,14 +116,14 @@ always happy to chat — reach me by email.`}
         />
       );
     case "projects":
-      return <FileExplorer initialData={PROJECTS_DATA} onError={onError} onOpenApp={onOpenApp} />;
+      return <FileExplorer initialData={PROJECTS_DATA} onError={onError} onOpenApp={onOpenApp} title="Projects" />;
     case "resume":
       return (
-        <div className="h-full w-full">
+        <div className="h-full w-full bg-[#525659] flex flex-col">
           <iframe
-            title="Resume"
             src="/files/Noor_Ali_Resume.pdf"
-            className="h-full w-full"
+            className="w-full h-full border-none block"
+            title="Resume"
           />
         </div>
       );
@@ -137,7 +133,7 @@ always happy to chat — reach me by email.`}
       return <TerminalApp />;
     case "music":
       return (
-        <div className="h-full w-full bg-black flex items-center justify-center p-4">
+        <div className="h-full w-full bg-black flex flex-col">
           <iframe
             style={{ borderRadius: "12px" }}
             src="https://open.spotify.com/embed/playlist/37i9dQZF1EQqkOPvHGajmW?utm_source=generator"
@@ -148,13 +144,16 @@ always happy to chat — reach me by email.`}
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"
             title="Spotify"
+            className="flex-1"
           />
         </div>
       );
     case "contact":
       return <BrowserApp />;
     case "trash":
-      return <FileExplorer initialData={TRASH_DATA} onError={onError} onOpenApp={onOpenApp} />;
+      return <FileExplorer initialData={TRASH_DATA} onError={onError} onOpenApp={onOpenApp} title="Trash" />;
+    case "explorer":
+      return <FileExplorer initialData={DESKTOP_DATA} onError={onError} onOpenApp={onOpenApp} title="File Explorer" />;
     case "games":
       return (
         <div className="h-full w-full bg-[#1e1e1e] p-8 text-neutral-200 font-pixel">
