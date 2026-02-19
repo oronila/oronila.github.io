@@ -55,7 +55,7 @@ export default function BrowserApp() {
                                     <span className="inline-block mr-1">🐦</span>My Twitter/X
                                 </a>
                                 <a href="https://www.linkedin.com/in/noor-ali05/" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
-                                    <span className="inline-block mr-1">🐦</span>My LinkedIn
+                                    <span className="inline-block mr-1">💼</span>My LinkedIn
                                 </a>
                             </div>
                         </div>
