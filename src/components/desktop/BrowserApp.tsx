@@ -48,7 +48,7 @@ export default function BrowserApp() {
 
                             <h3 className="font-bold text-center bg-green-700 text-white mt-4 mb-2 py-1">Cool Sites</h3>
                             <div className="text-center space-y-2 text-xs">
-                                <a href="https://github.com/onorila" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
+                                <a href="https://github.com/oronila" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
                                     <span className="inline-block mr-1">💾</span>My GitHub
                                 </a>
                                 <a href="https://x.com/oronila_" target="_blank" rel="noreferrer" className="block text-blue-800 underline">
