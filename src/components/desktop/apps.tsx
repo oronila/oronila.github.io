@@ -374,12 +374,20 @@ Try Nebula AI.
       );
     case "personal_website_iframe":
       return (
-        <div className="h-full w-full bg-black">
+        <div className="relative h-full w-full bg-black overflow-hidden flex flex-col items-center justify-center">
           <iframe
             src="https://oronila.github.io"
-            className="w-full h-full border-none"
+            className="absolute inset-0 w-full h-full border-none opacity-20 grayscale pointer-events-none"
             title="oronila.github.io"
           />
+          <div className="relative z-10 flex flex-col items-center gap-4">
+            <h1 className="font-pixel text-red-500 text-3xl md:text-5xl text-center drop-shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse">
+              INCEPTION DENIED
+            </h1>
+            <p className="font-pixel text-neutral-400 text-xs md:text-sm text-center bg-black/50 p-2 rounded">
+              Recursion limit reached.
+            </p>
+          </div>
         </div>
       );
     case "nebula":
