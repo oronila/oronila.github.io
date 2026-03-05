@@ -20,10 +20,12 @@ export type AppId =
   | "genesis"
   | "personal_website_iframe"
   | "nebula"
+  | "modelanything"
   | "about_fynopsis"
   | "about_genesis"
   | "about_personal"
   | "about_nebula"
+  | "about_modelanything"
   | "essay_draft";
 
 export type DesktopIcon = {

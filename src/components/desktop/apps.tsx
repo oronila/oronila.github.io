@@ -25,10 +25,12 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   genesis: { title: "Genesis", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#10b981" },
   personal_website_iframe: { title: "oronila.github.io", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#f59e0b" },
   nebula: { title: "Nebula", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#8b5cf6" },
+  modelanything: { title: "ModelAnything", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#f87171" },
   about_fynopsis: { title: "About Fynopsis", icon: "/icons/pixel/file.svg", color: "#6366f1" },
   about_genesis: { title: "About Genesis", icon: "/icons/pixel/file.svg", color: "#10b981" },
   about_personal: { title: "About Personal Website", icon: "/icons/pixel/file.svg", color: "#f59e0b" },
   about_nebula: { title: "About Nebula", icon: "/icons/pixel/file.svg", color: "#8b5cf6" },
+  about_modelanything: { title: "About ModelAnything", icon: "/icons/pixel/file.svg", color: "#f87171" },
   essay_draft: { title: "Essay Draft", icon: "/icons/pixel/file.svg", color: "#cbd5e1" },
 };
 
@@ -102,6 +104,8 @@ export function getDefaultTitle(appId: AppId) {
       return "oronila.github.io";
     case "nebula":
       return "Nebula";
+    case "modelanything":
+      return "ModelAnything";
     case "about_fynopsis":
       return "About Fynopsis";
     case "about_genesis":
@@ -110,6 +114,8 @@ export function getDefaultTitle(appId: AppId) {
       return "About Personal Website";
     case "about_nebula":
       return "About Nebula";
+    case "about_modelanything":
+      return "About ModelAnything";
     case "essay_draft":
       return "Essay Draft";
     default:
@@ -133,7 +139,7 @@ export function AppContent({
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
           defaultValue={`Noor Ali
 
-probably building something new.
+i am currently working on modelanything.io.
 
 projects at github.
 
@@ -185,6 +191,17 @@ Built with Next.js, Tailwind, and a lot of pixel art vibes.
 Try Nebula AI. 
 
 [Filler text: describe what Nebula does, the tech stack, the mission, etc.]`}
+        />
+      );
+    case "about_modelanything":
+      return (
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
+          defaultValue={`ModelAnything
+
+Currently building modelanything.io.
+
+[Filler text: details about the project go here.]`}
         />
       );
     case "essay_draft":
@@ -397,6 +414,16 @@ Try Nebula AI.
             src="https://trynebula.ai"
             className="w-full h-full border-none"
             title="Nebula"
+          />
+        </div>
+      );
+    case "modelanything":
+      return (
+        <div className="h-full w-full bg-black">
+          <iframe
+            src="https://modelanything.io"
+            className="w-full h-full border-none"
+            title="ModelAnything"
           />
         </div>
       );

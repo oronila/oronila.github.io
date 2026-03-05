@@ -135,6 +135,28 @@ export const PROJECTS_DATA: FileSystemItem[] = [
             },
         ],
     },
+    {
+        id: "modelanything-folder",
+        name: "ModelAnything",
+        type: "folder",
+        icon: "/icons/pack/folder.svg",
+        children: [
+            {
+                id: "modelanything-info",
+                name: "about.txt",
+                type: "file",
+                icon: "/icons/pixel/file.svg",
+                content: "about_modelanything",
+            },
+            {
+                id: "modelanything-browser",
+                name: "modelanything.io",
+                type: "file",
+                icon: "/icons/pack/svgs-small/Google Chrome.svg",
+                content: "modelanything",
+            },
+        ],
+    },
 ];
 
 export const DESKTOP_DATA: FileSystemItem[] = [
