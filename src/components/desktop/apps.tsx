@@ -137,7 +137,7 @@ export function AppContent({
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`Noor Ali
+          defaultValue={`noor ali
 
 i am currently working on modelanything.io.
 
@@ -152,49 +152,49 @@ always happy to chat — reach me by email (noormehdiali@gmail.com).`}
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`Fynopsis
+          defaultValue={`fynopsis
 
-This was the first startup I worked on. It was an AI-native dataroom, but ultimately the team decided it wasn't worth pursuing further. A great learning experience in the early days of AI applications.`}
+this was the first startup i worked on. it was an ai-native dataroom, but ultimately the team decided it wasn't worth pursuing further. a great learning experience in the early days of ai applications.`}
         />
       );
     case "about_genesis":
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`Genesis
+          defaultValue={`genesis
 
-Genesis is UT Austin's startup fund and easily my favorite organization at UT (plenty of bias here). I truly believe in the mission of supporting student founders, and I personally updated the website to its current state.`}
+genesis is ut austin's startup fund and easily my favorite organization at ut (plenty of bias here). i truly believe in the mission of supporting student founders, and i personally updated the website to its current state.`}
         />
       );
     case "about_personal":
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`Personal Website
+          defaultValue={`personal website
 
-This site started as an experiment to test new coding LLMs. Since December 2025, when I really dove into coding, I've been shocked by how capable these models have become. 
+this site started as an experiment to test new coding llms. since december 2025, when i really dove into coding, i've been shocked by how capable these models have become. 
 
-They coded almost this entire website with minimal intervention and only a few bugs I had to point out. I'm immensely worried about the future of software engineering, but I still do it because it's so fun.`}
+they coded almost this entire website with minimal intervention and only a few bugs i had to point out. i'm immensely worried about the future of software engineering, but i still do it because it's so fun.`}
         />
       );
     case "about_nebula":
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`Nebula
+          defaultValue={`nebula
 
-Nebula is the memory layer for AI. I started working on it after noticing the problem while building Fynopsis. 
+nebula is the memory layer for ai. i started working on it after noticing the problem while building fynopsis. 
 
-I worked with my old co-founder for a while, but eventually decided I wasn't ready to drop out of school for it. It's definitely worth checking out; my old co-founder Will Zhang is doing some awesome things with it.`}
+i worked with my old co-founder for a while, but eventually decided i wasn't ready to drop out of school for it. it's definitely worth checking out; my old co-founder will zhang is doing some awesome things with it.`}
         />
       );
     case "about_modelanything":
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`ModelAnything
+          defaultValue={`modelanything
 
-I'm not exactly sure what I want to do with ModelAnything yet. I'm just hoping to build something cool in the ML space—likely something to visualize complex concepts. It's not about the money, at least for now.`}
+i'm not exactly sure what i want to do with modelanything yet. i'm just hoping to build something cool in the ml space—likely something to visualize complex concepts. it's not about the money, at least for now.`}
         />
       );
     case "essay_draft":
