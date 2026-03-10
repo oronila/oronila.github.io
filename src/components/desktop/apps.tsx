@@ -137,7 +137,7 @@ export function AppContent({
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`noor ali
+          defaultValue={`Noor Ali
 
 i am currently working on modelanything.io.
 
