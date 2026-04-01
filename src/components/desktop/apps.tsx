@@ -212,7 +212,7 @@ i'm not exactly sure what i want to do with modelanything yet. i'm just hoping t
       return (
         <div className="h-full w-full bg-[#525659] flex flex-col">
           <iframe
-            src="/files/Noor_Ali_Resume_Summer.pdf"
+            src="/files/Noor_Ali_Resume.pdf"
             className="w-full h-full border-none block"
             title="Resume"
           />
