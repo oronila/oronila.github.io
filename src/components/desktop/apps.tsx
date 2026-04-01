@@ -139,13 +139,13 @@ export function AppContent({
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
           defaultValue={`Noor Ali
 
-i am currently working on modelanything.io.
+i am currently interested in model interpretability atm. doing it solo but would love to work on a team! feel free to reach out.
 
-projects at github.
+past projects on my github.
 
 i used to work on fynopsis.ai and trynebula.ai.
 
-always happy to chat — reach me by email (noormehdiali@gmail.com).`}
+always happy to chat — reach me by email — noormehdiali@gmail.com.`}
         />
       );
     case "about_fynopsis":
