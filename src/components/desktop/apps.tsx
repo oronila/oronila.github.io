@@ -139,7 +139,7 @@ export function AppContent({
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
           defaultValue={`Noor Ali
 
-i am currently interested in model interpretability atm. doing it solo but would love to work on a team! feel free to reach out.
+i am currently competiting in OpenAI's parameter golfing competition.
 
 past projects on my github.
 
