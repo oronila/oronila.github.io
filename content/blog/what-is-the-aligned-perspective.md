@@ -1,5 +1,5 @@
 ---
-title: "What is the "aligned" perspective?"
+title: 'What is the "aligned" perspective?'
 date: "2026-04-10"
 description: "It's in the title."
 ---

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const COLORS = [
     "#ef4444", // red
@@ -19,7 +19,7 @@ export default function Screensaver({ onWake }: { onWake: () => void }) {
     const textRef = useRef<HTMLDivElement>(null);
     const requestRef = useRef<number>(undefined);
 
-    const animate = () => {
+    const animate = useCallback(() => {
         if (!containerRef.current || !textRef.current) return;
 
         const container = containerRef.current.getBoundingClientRect();
@@ -63,7 +63,7 @@ export default function Screensaver({ onWake }: { onWake: () => void }) {
         }
 
         requestRef.current = requestAnimationFrame(animate);
-    };
+    }, []);
 
     useEffect(() => {
         // Initial random position
@@ -82,7 +82,7 @@ export default function Screensaver({ onWake }: { onWake: () => void }) {
         return () => {
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
         };
-    }, []);
+    }, [animate]);
 
     return (
         <div

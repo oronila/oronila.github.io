@@ -34,21 +34,6 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   essay_draft: { title: "Essay Draft", icon: "/icons/pixel/file.svg", color: "#cbd5e1" },
 };
 
-function AppFrame({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="h-full w-full p-4">
-      <div className="text-sm text-neutral-400">{title}</div>
-      <div className="mt-3 text-sm leading-relaxed text-neutral-100">{children}</div>
-    </div>
-  );
-}
-
 function SystemInfo() {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full bg-[#1e1e1e] text-neutral-200 font-pixel p-8 select-none">
