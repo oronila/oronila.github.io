@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function BrowserApp() {
     const [page, setPage] = React.useState<"home" | "blog">("home");
@@ -75,14 +76,19 @@ export default function BrowserApp() {
                                 </>
                             ) : (
                                 <>
-                                    <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">My Blog</h2>
-                                    <div className="mb-6">
-                                        <p className="mt-2 text-sm leading-relaxed italic text-center text-gray-500">
-                                            ... Content Loading ...
+                                    <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">
+                                        The Aligned Perspective
+                                    </h2>
+                                    <div className="mb-6 text-center text-sm leading-relaxed">
+                                        <p className="text-gray-700">
+                                            Longer writing lives on its own page.
                                         </p>
-                                        <p className="mt-4 text-center font-bold text-red-600">
-                                            Blog posts are coming soon!
-                                        </p>
+                                        <Link
+                                            href="/blog"
+                                            className="mt-3 inline-block font-bold text-blue-800 underline hover:text-red-600"
+                                        >
+                                            Open the blog →
+                                        </Link>
                                     </div>
                                 </>
                             )}
