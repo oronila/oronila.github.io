@@ -33,7 +33,11 @@ export default function BrowserApp() {
                 <div className="max-w-3xl mx-auto border-4 border-blue-800 bg-white p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
                     {/* Header */}
                     <div className="text-center border-b-4 border-double border-black pb-4 mb-4">
-                        <h1 className="text-4xl text-blue-800 font-bold">Welcome to Noor&apos;s Web World</h1>
+                        <h1 className="text-4xl text-blue-800 font-bold mb-2">Welcome to Noor&apos;s Web World</h1>
+                        <marquee className="bg-yellow-200 border border-black p-1 font-bold text-red-600">
+                            ★ You made it — welcome aboard ★ Poke around the desktop ★ Longer reads on {BLOG_TITLE}{" "}
+                            ★ Best viewed in a real browser (any era) ★ Thanks for stopping by ★
+                        </marquee>
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-6">

@@ -186,9 +186,7 @@ i'm not exactly sure what i want to do with modelanything yet. i'm just hoping t
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`The catcher in the rye is...
-
-[Filler text: "If you really want to hear about it, the first thing you'll probably want to know is where I was born, and what my lousy childhood was like, and how my parents were occupied and all before they had me, and all that David Copperfield kind of crap, but I don't feel like going into it, if you want to know the truth." - J.D. Salinger]`}
+          defaultValue={`AI will take over the world in the wrong set of circumstances, so I will try to make my set of circumstances the right one.`}
         />
       );
     case "projects":
