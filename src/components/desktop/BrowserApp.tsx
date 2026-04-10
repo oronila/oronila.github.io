@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { BLOG_TITLE } from "@/constants/blog";
 
 export default function BrowserApp() {
     const [page, setPage] = React.useState<"home" | "blog">("home");
@@ -77,7 +78,7 @@ export default function BrowserApp() {
                             ) : (
                                 <>
                                     <h2 className="text-2xl font-bold bg-gray-200 px-2 py-1 mb-4 border-l-4 border-black">
-                                        The Aligned Perspective
+                                        {BLOG_TITLE}
                                     </h2>
                                     <div className="mb-6 text-center text-sm leading-relaxed">
                                         <p className="text-gray-700">

@@ -8,8 +8,6 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import readingTime from "reading-time";
 
-export const BLOG_TITLE = "The Aligned Perspective";
-
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
 export type PostMeta = {

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BLOG_TITLE, getPostBySlug, getPostSlugs } from "@/lib/blog";
+import { BLOG_TITLE } from "@/constants/blog";
+import { getPostBySlug, getPostSlugs } from "@/lib/blog";
 
 type Props = { params: Promise<{ slug: string }> };
 

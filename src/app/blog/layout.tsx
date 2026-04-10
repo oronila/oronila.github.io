@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BLOG_TITLE } from "@/lib/blog";
+import { BLOG_TITLE } from "@/constants/blog";
 
 export const metadata: Metadata = {
   title: BLOG_TITLE,
@@ -22,9 +22,6 @@ export default function BlogLayout({
           >
             {BLOG_TITLE}
           </Link>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Notes where the pieces line up.
-          </p>
           <Link
             href="/"
             className="mt-2 w-fit text-xs text-neutral-500 underline-offset-4 hover:underline dark:text-neutral-500"
