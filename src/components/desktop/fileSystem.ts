@@ -115,7 +115,7 @@ export const PROJECTS_DATA: FileSystemItem[] = [
     },
     {
         id: "nebula-folder",
-        name: "Nebula",
+        name: "Nebula (now Zeroset)",
         type: "folder",
         icon: "/icons/pack/folder.svg",
         children: [
@@ -128,7 +128,7 @@ export const PROJECTS_DATA: FileSystemItem[] = [
             },
             {
                 id: "nebula-browser",
-                name: "trynebula.ai",
+                name: "trynebula.ai (zeroset.com)",
                 type: "file",
                 icon: "/icons/pack/svgs-small/Google Chrome.svg",
                 content: "nebula",

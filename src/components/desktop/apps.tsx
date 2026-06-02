@@ -24,7 +24,7 @@ export const APP_CONFIG: Record<AppId, { title: string; icon: string; color: str
   fynopsis: { title: "Fynopsis", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#6366f1" },
   genesis: { title: "Genesis", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#10b981" },
   personal_website_iframe: { title: "oronila.github.io", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#f59e0b" },
-  nebula: { title: "Nebula", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#8b5cf6" },
+  nebula: { title: "Nebula (now Zeroset)", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#8b5cf6" },
   modelanything: { title: "ModelAnything", icon: "/icons/pack/svgs-small/Google Chrome.svg", color: "#f87171" },
   about_fynopsis: { title: "About Fynopsis", icon: "/icons/pixel/file.svg", color: "#6366f1" },
   about_genesis: { title: "About Genesis", icon: "/icons/pixel/file.svg", color: "#10b981" },
@@ -88,7 +88,7 @@ export function getDefaultTitle(appId: AppId) {
     case "personal_website_iframe":
       return "oronila.github.io";
     case "nebula":
-      return "Nebula";
+      return "Nebula (now Zeroset)";
     case "modelanything":
       return "ModelAnything";
     case "about_fynopsis":
@@ -128,7 +128,7 @@ i am currently interning at Plaid in NYC.
 
 past projects on my github.
 
-i used to work on fynopsis.ai and trynebula.ai.
+i used to work on fynopsis.ai and trynebula.ai (now zeroset.com).
 
 always happy to chat — reach me by email — noormehdiali@gmail.com.`}
         />
@@ -166,7 +166,7 @@ they coded almost this entire website with minimal intervention and only a few b
       return (
         <textarea
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
-          defaultValue={`nebula
+          defaultValue={`nebula (now zeroset)
 
 nebula is the memory layer for ai. i started working on it after noticing the problem while building fynopsis. 
 
