@@ -124,7 +124,7 @@ export function AppContent({
           className="h-full w-full resize-none bg-transparent p-4 text-sm text-neutral-200 outline-none font-pixel leading-relaxed selection:bg-white/20"
           defaultValue={`Noor Ali
 
-i am currently competiting in OpenAI's parameter golfing competition.
+i am currently interning at Plaid in NYC.
 
 past projects on my github.
 
