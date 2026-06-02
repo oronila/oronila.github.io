@@ -31,7 +31,7 @@ export default function TopBar({ onOpenApp, onRestart }: { onOpenApp: (id: AppId
         const fetchWeather = async () => {
             try {
                 const res = await fetch(
-                    "https://api.open-meteo.com/v1/forecast?latitude=30.2672&longitude=-97.7431&current_weather=true&temperature_unit=fahrenheit"
+                    "https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true&temperature_unit=fahrenheit"
                 );
                 const data = await res.json();
                 const { temperature, weathercode } = data.current_weather;
@@ -139,7 +139,7 @@ export default function TopBar({ onOpenApp, onRestart }: { onOpenApp: (id: AppId
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-2">
                         <span>{weather ? weather.icon : "Loading..."}</span>
-                        <span>{weather ? `${weather.temp}°F Austin` : ""}</span>
+                        <span>{weather ? `${weather.temp}°F New York` : ""}</span>
                     </div>
                     <div>
                         {time}
