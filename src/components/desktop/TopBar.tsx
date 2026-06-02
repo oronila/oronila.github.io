@@ -20,6 +20,7 @@ export default function TopBar({ onOpenApp, onRestart }: { onOpenApp: (id: AppId
                 hour: "numeric",
                 minute: "numeric",
                 hour12: true,
+                timeZone: "America/New_York",
             };
             setTime(now.toLocaleString("en-US", options).replace(/,/g, ""));
         };
